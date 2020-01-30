@@ -1,37 +1,39 @@
 package com.example.demo.util;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Component
 public class DateHelper {
 
-  @Value("base.data-format")
-  private static String baseForamt;
+  @Value("${base.data-format}")
+  private String baseForamt;
 
-  public static String getDateToStringFormat(String format, Date time) {
+  public String DateToStringFormat(String format, Date time) {
     SimpleDateFormat transFormat = new SimpleDateFormat(format);
     return transFormat.format(time);
   }
 
-  public static String getDateToStringFormat(String format) {
+  public String DefaultDateToStringFormat(String format) {
     SimpleDateFormat transFormat = new SimpleDateFormat(format);
     return transFormat.format(new Date());
   }
 
-  public static String getDateToString() {
-    SimpleDateFormat transFormat = new SimpleDateFormat(DateHelper.baseForamt);
+  public String DefaultDateToDefalutString() {
+    SimpleDateFormat transFormat = new SimpleDateFormat(this.baseForamt);
     return transFormat.format(new Date());
   }
 
-  public static String getDateToString(Date time) {
-    SimpleDateFormat transFormat = new SimpleDateFormat(DateHelper.baseForamt);
+  public String DateToDefaultStringForamt(Date time) {
+    SimpleDateFormat transFormat = new SimpleDateFormat(this.baseForamt);
     return transFormat.format(time);
   }
 
-  public static Date getStringToDateFormat(String format, String time) {
+  public Date StringFormatToDate(String format, String time) {
     try {
       SimpleDateFormat transFormat = new SimpleDateFormat(format);
       return transFormat.parse(time);
@@ -41,9 +43,10 @@ public class DateHelper {
     }
   }
 
-  public static Date getStingToDate(String time) {
+  public Date StingToDate(String time) {
     try {
-      SimpleDateFormat transFormat = new SimpleDateFormat(DateHelper.baseForamt);
+      System.out.println(this.baseForamt);
+      SimpleDateFormat transFormat = new SimpleDateFormat(this.baseForamt);
       return transFormat.parse(time);
     } catch (ParseException e) {
     //  throw new DateParseException(ErrorCode.DATE_PARSE_ERROR);

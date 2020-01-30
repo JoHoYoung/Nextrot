@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -18,4 +19,11 @@ public class Video {
   private Date createdAt;
   private Date updatedAt;
 
+  public Video(String key){
+    this.id = UUID.randomUUID().toString();
+    this.like = 0;
+    this.view = 0;
+    this.createdAt = new Date();
+    this.updatedAt = new Date();
+  }
 }

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,5 +30,12 @@ public class Singer {
     this.like =0;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+  }
+
+  public Singer(String name){
+    this.name = name;
+    this.like = 0;
+    this.createdAt = new Date();
+    this.updatedAt = new Date();
   }
 }

@@ -1,6 +1,4 @@
-package com.example.demo.Response;
-
-import javax.xml.crypto.Data;
+package com.example.demo.response;
 
 public class DataResponse<T> extends BaseResponse{
   public T data;

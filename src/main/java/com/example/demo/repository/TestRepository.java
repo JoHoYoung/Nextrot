@@ -9,4 +9,5 @@ public interface TestRepository extends ReactiveMongoRepository<Test, Integer> {
 
   @Query("{'name':?0}")
   Flux<Test> findByName(String name);
+
 }
