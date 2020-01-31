@@ -5,6 +5,7 @@ import com.example.demo.model.Song;
 import com.example.demo.model.Video;
 import com.example.demo.service.SingerService;
 import com.example.demo.util.DateHelper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.util.DateUtil;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -30,6 +31,9 @@ public class SingerServiceTest {
   SingerService singerService;
   @Autowired
   DateHelper dateHelper;
+  @Autowired
+  ObjectMapper objectMapper;
+
 //  @Test
 //  public void AinsertSingerTest() {
 //    Singer singer = new Singer("HoYoung");
@@ -60,7 +64,7 @@ public class SingerServiceTest {
 //  }
 
   @Test
-  public void CinsertVideoToSongTest() {
+  public void CinsertVideoToSongTest() throws Exception{
     //  singerService.createSinger(new Singer("SangHo")).subscribe();
     //singerService.insertSongToSingerById("5e32c8cc50823b60f80758e5", new Song("Music2", "Musice2Lyrics")).subscribe();
    // singerService.insertSongToSingerById("5e32c8cc50823b60f80758e5", new Song("Music2", "Musice2Lyrics")).subscribe();
@@ -72,10 +76,23 @@ public class SingerServiceTest {
 
     singerService.findAllSingersFromDate(date)
       .collectList().subscribe(singers -> {
-      System.out.println(singers);
+      //System.out.println(singers);
       singerService.findAllSongsFromDateAndSingers(date, singers).collectList()
         .subscribe(songs -> {
-          System.out.println(songs);
+            try{
+       //       System.out.println(objectMapper.writeValueAsString(songs));
+//
+          }catch (Exception e){
+
+          }
+            singerService.findAllVideoFromDateAndSongs(date,songs).collectList()
+          .subscribe(videos -> {
+            try{
+              System.out.println(objectMapper.writeValueAsString(videos));
+            }catch (Exception e){
+
+            }
+          });
         });
     });
 
