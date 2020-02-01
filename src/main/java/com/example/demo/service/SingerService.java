@@ -18,6 +18,8 @@ public interface SingerService {
   Mono<Singer> createSinger(Singer singer);
 
   Mono<Singer> findOneById(String id);
+  Flux<Singer> findAllData();
+
   Flux<Singer> findSingersByName(String name);
   Flux<Singer> findAllSingersFromDate(Date from);
   Flux<Singer> findAllSongsFromDateAndSingers(Date from, List<Singer> singers);

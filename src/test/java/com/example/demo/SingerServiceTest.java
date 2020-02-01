@@ -72,15 +72,22 @@ public class SingerServiceTest {
 //      .subscribe();
 //    singerService.insertVideoToSong("5e328f15b7e4937f52c67679", "36483ebb-ec5b-442f-9487-1c785370b56d", new Video("FromKaKao"))
 //      .subscribe();
-    Date date = dateHelper.StingToDate("2018-01-01 01:00:00");
+    Date date = dateHelper.StingToDate("2018-01-01-01:00:00");
 
+    singerService.findAllData().collectList().subscribe(data -> {
+      try{
+      System.out.println(objectMapper.writeValueAsString(data));
+    }catch(Exception e){
+
+    }}
+      );
     singerService.findAllSingersFromDate(date)
       .collectList().subscribe(singers -> {
       //System.out.println(singers);
       singerService.findAllSongsFromDateAndSingers(date, singers).collectList()
         .subscribe(songs -> {
             try{
-       //       System.out.println(objectMapper.writeValueAsString(songs));
+  //            System.out.println(objectMapper.writeValueAsString(songs));
 //
           }catch (Exception e){
 
@@ -88,7 +95,7 @@ public class SingerServiceTest {
             singerService.findAllVideoFromDateAndSongs(date,songs).collectList()
           .subscribe(videos -> {
             try{
-              System.out.println(objectMapper.writeValueAsString(videos));
+            //  System.out.println(objectMapper.writeValueAsString(videos));
             }catch (Exception e){
 
             }

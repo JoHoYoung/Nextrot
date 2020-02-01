@@ -8,6 +8,9 @@ import reactor.core.publisher.Mono;
 
 public interface SingerRespository extends ReactiveMongoRepository<Singer, String> {
 
+  @Query("{}")
+  Flux<Singer> findAll();
+
   @Query("{'name' : ?0 }")
   Flux<Singer> findByName(String name);
 
