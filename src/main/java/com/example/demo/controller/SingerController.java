@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.response.BaseResponse;
 import com.example.demo.response.DataListResponse;
+import com.example.demo.response.DataResponse;
 import com.example.demo.service.SingerService;
 import com.example.demo.util.DateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,24 @@ public class SingerController {
   @Autowired
   DateHelper dateHelper;
 
-  @GetMapping("/getAll")
+  @GetMapping("/getNew")
+  public Mono<ResponseEntity<BaseResponse>> getNewSinger(@RequestParam("from")String date){
+    Date from = dateHelper.StingToDate(date);
+    return singerService.findAllNewSinger(from).collectList().map(data -> {
+      final BaseResponse response = new DataListResponse<>(200,"success", data);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    });
+  }
+
+  @GetMapping("/getList")
+  public Mono<ResponseEntity<BaseResponse>> getAllSinger(){
+    return singerService.findAllSingers().collectList().map(data -> {
+      final BaseResponse response = new DataListResponse<>(200, "success", data);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    });
+  }
+
+  @GetMapping("/getAllData")
   public Mono<ResponseEntity<BaseResponse>> getAllSingerData() {
     return singerService.findAllData().collectList().map(data -> {
       final BaseResponse baseResponse = new DataListResponse<>(200, "success", data);
@@ -35,15 +53,20 @@ public class SingerController {
   }
 
   @GetMapping("/updated")
-  public Mono<ResponseEntity<BaseResponse>> getUpdateSingerData(@RequestParam("from")String date){
-
+  public Mono<ResponseEntity<BaseResponse>> getUpdateSingerData(@RequestParam("from") String date) {
 
     Date from = dateHelper.StingToDate(date);
-
     return singerService.findAllSingersFromDate(from).collectList().map(data -> {
       final BaseResponse baseResponse = new DataListResponse<>(200, "success", data);
       return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     });
   }
 
+  @GetMapping("/get")
+  public Mono<ResponseEntity<BaseResponse>> getSingerById(@RequestParam("id") String id) {
+    return singerService.findOneById(id).map(data -> {
+      final BaseResponse response = new DataResponse<>(200, "success", data);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    });
+  }
 }
