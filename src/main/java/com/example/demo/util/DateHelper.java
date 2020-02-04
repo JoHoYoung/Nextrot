@@ -1,5 +1,7 @@
 package com.example.demo.util;
 
+import com.example.demo.ErrorCode;
+import com.example.demo.exception.DateParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -38,19 +40,16 @@ public class DateHelper {
       SimpleDateFormat transFormat = new SimpleDateFormat(format);
       return transFormat.parse(time);
     } catch (ParseException e) {
-  //    throw new DateParseException(ErrorCode.DATE_PARSE_ERROR);
-      return null;
+      throw new DateParseException(ErrorCode.DATE_PARSE_ERROR);
     }
   }
 
   public Date StingToDate(String time) {
     try {
-      System.out.println(this.baseForamt);
       SimpleDateFormat transFormat = new SimpleDateFormat(this.baseForamt);
       return transFormat.parse(time);
     } catch (ParseException e) {
-    //  throw new DateParseException(ErrorCode.DATE_PARSE_ERROR);
-      return null;
+      throw new DateParseException(ErrorCode.DATE_PARSE_ERROR);
     }
   }
 }

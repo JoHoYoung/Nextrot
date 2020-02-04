@@ -56,7 +56,6 @@ public class SingerServiceImpl implements SingerService {
 
     Aggregation aggregation = Aggregation.
       newAggregation(aggregationOperations);
-
     return reactiveMongoTemplate.aggregate(aggregation, "singer", Singer.class);
   }
 
@@ -254,12 +253,14 @@ public class SingerServiceImpl implements SingerService {
       .andExpression("root").as("root")
       .andExpression("root.name").as("name")
       .andExpression("root.like").as("like")
-      .and("songs").nested(bind("id", "root.songs.id")
+      .and("songs").nested(bind("_id", "root.songs._id")
         .and("name", "root.songs.name")
         .and("lyrics", "root.songs.lyrics")
         .and("like", "root.songs.like")
         .and("view", "root.songs.view")
-        .and("video", "video")));
+        .and("video", "video")
+        .and("createdAt", "root.songs.createdAt")
+        .and("updatedAt", "root.songs.updatedAt")));
 
     aggregationOperations.add(Aggregation.group("$root._id")
       .first("root.name").as("name")

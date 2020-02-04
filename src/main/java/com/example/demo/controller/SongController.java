@@ -8,10 +8,7 @@ import com.example.demo.util.DateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.Date;
@@ -26,9 +23,9 @@ public class SongController {
   DateHelper dateHelper;
 
   // 특정 가수의 노래 리스트
-  @GetMapping("/getList")
-  public Mono<ResponseEntity<BaseResponse>> getSongsBySingerId(@RequestParam("id")String id) {
-    return singerService.findOneById(id).map(singer -> {
+  @GetMapping("")
+  public Mono<ResponseEntity<BaseResponse>> getSongsBySingerId(@RequestParam("singerId")String singerId) {
+    return singerService.findOneById(singerId).map(singer -> {
       return singerService.findAllSongsFromSinger(singer).collectList().map(data -> {
         final BaseResponse response = new DataListResponse<>(200, "success", data.get(0).getSongs());
         return new ResponseEntity(response, HttpStatus.OK);
@@ -49,8 +46,8 @@ public class SongController {
   }
 
   // 데이터의 변경이 생긴 특정 가수의 노래 목록
-  @GetMapping("/updatedSinger")
-  public Mono<ResponseEntity<BaseResponse>> getSongsUpdatedSinger(@RequestParam("singerId")String id, @RequestParam("from")String date){
+  @GetMapping("/updated/{singerId}")
+  public Mono<ResponseEntity<BaseResponse>> getSongsUpdatedSinger(@PathVariable("singerId")String id, @RequestParam("from")String date){
     Date from = dateHelper.StingToDate(date);
     return singerService.findOneById(id).map(singer -> {
       return singerService.findAllSongsFromDateAndSinger(from, singer).collectList().map(data -> {

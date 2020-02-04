@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.ErrorCode;
+import com.example.demo.exception.EmptyDataException;
 import com.example.demo.model.Singer;
 import com.example.demo.response.BaseResponse;
 import com.example.demo.response.DataListResponse;
@@ -23,7 +25,8 @@ public class VideoController {
   @Autowired
   DateHelper dateHelper;
 
-  @GetMapping("/get")
+  //특정 노래의 비디오 리스트
+  @GetMapping("")
   public Mono<ResponseEntity<BaseResponse>> getVideoFromSong(@RequestParam("songId")String songId){
     return singerService.findAllVideoBySongId(songId).map(data -> data.getSongs()).collectList()
       .map(k -> {
@@ -32,6 +35,7 @@ public class VideoController {
       });
   }
 
+  // 갱신이 생긴 모든 비디오 리스트
   @GetMapping("/updated")
   public Mono<ResponseEntity<BaseResponse>> getVideoFromDate(@RequestParam("from")String date){
     Date from = dateHelper.StingToDate(date);
@@ -44,12 +48,19 @@ public class VideoController {
     });
   }
 
+  // IndexOutOfBoundsException
+  // 특정 노래의 갱신 리스트
   @GetMapping("/updated/{songId}")
   public Mono<ResponseEntity<BaseResponse>> getVideoByDateAndSong(@PathVariable("songId")String songId, @RequestParam("from")String date){
     Date from = dateHelper.StingToDate(date);
     return singerService.findAllVideoBySongIdAndFromDate(from, songId).collectList().map(data -> {
-      final BaseResponse response = new DataListResponse<>(200, "success", data);
-      return new ResponseEntity(response, HttpStatus.OK);
+      try{
+        final BaseResponse response = new DataListResponse<>(200, "success", data.get(0).getSongs().get(0).getVideo());
+        return new ResponseEntity(response, HttpStatus.OK);
+      }catch(IndexOutOfBoundsException e){
+        throw new EmptyDataException(ErrorCode.EMPTY_DATA_SET);
+      }
     });
   }
+
 }
