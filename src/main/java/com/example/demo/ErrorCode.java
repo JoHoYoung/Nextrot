@@ -5,7 +5,12 @@ public enum ErrorCode {
   EMPTY_DATA_SET(701,"A001", "Empty Data Set"),
   INVALID_KEY(702, "A002", "Invalid Key"),
 
-  DATE_PARSE_ERROR(471,"B001", "Date Parse Error");
+  DATE_PARSE_ERROR(721,"B001", "Date Parse Error"),
+  // JWT Token
+  JWT_TOKEN_EXPIRED(731,"C001","Token Expired"),
+  INVALID_TOKEN(732,"C002","Invalid Token"),
+  EMPTY_TOKEN(733,"C003","Empty Token"),
+  DECODED_TOKEN_PARSE_ERROR(431,"A004","Error at Parse decoded Token");
 
   private final String statusCode;
   private final String statusMsg;
