@@ -87,255 +87,6 @@ public class SingerServiceImpl implements SingerService {
   }
 
 
-  public Flux<Singer> findAllSongsFromSinger(Singer singer) {
-    ArrayList<Criteria> orOperations = new ArrayList<>();
-    orOperations.add(Criteria.where("_id").is(singer.getId()));
-    Criteria orCriteria = new Criteria();
-    orCriteria.orOperator(orOperations.toArray(new Criteria[0]));
-
-    List<AggregationOperation> aggregationOperations = new ArrayList<>();
-
-    aggregationOperations.add(Aggregation.match(orCriteria));
-    aggregationOperations.add(Aggregation.unwind("songs"));
-    aggregationOperations.add(Aggregation.project().andExclude("songs.songs.video"));
-    aggregationOperations.add(project()
-      .andExpression("_id").as("_id")
-      .andExpression("$name").as("name")
-      .andExpression("like").as("like")
-      .andExpression("createdAt").as("createdAt")
-      .andExpression("updatedAt").as("updatedAt")
-      .andExpression("songs").as("songs")
-    );
-
-    aggregationOperations.add(Aggregation.group("_id")
-      .first("name").as("name")
-      .first("like").as("like")
-      .first("createdAt").as("createdAt")
-      .first("updatedAt").as("updatedAt")
-      .addToSet("songs").as("songs"));
-    Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
-    return reactiveMongoTemplate.aggregate(aggregation, "singer", Singer.class);
-  }
-
-  public Flux<Singer> findAllSongsFromSingers(List<Singer> singers) {
-    ArrayList<Criteria> orOperations = new ArrayList<>();
-
-    // All ids;
-    for (Singer singer : singers) {
-      orOperations.add(Criteria.where("_id").is(singer.getId()));
-    }
-
-    Criteria orCriteria = new Criteria();
-    orCriteria.orOperator(orOperations.toArray(new Criteria[0]));
-
-    List<AggregationOperation> aggregationOperations = new ArrayList<>();
-    aggregationOperations.add(Aggregation.match(orCriteria));
-    aggregationOperations.add(Aggregation.unwind("songs"));
-    aggregationOperations.add(Aggregation.project().andExclude("songs.songs.video"));
-    aggregationOperations.add(project()
-      .andExpression("_id").as("_id")
-      .andExpression("$name").as("name")
-      .andExpression("like").as("like")
-      .andExpression("createdAt").as("createdAt")
-      .andExpression("updatedAt").as("updatedAt")
-      .andExpression("songs").as("songs")
-    );
-    aggregationOperations.add(Aggregation.group("_id")
-      .first("name").as("name")
-      .first("like").as("like")
-      .first("createdAt").as("createdAt")
-      .first("updatedAt").as("updatedAt")
-      .addToSet("songs").as("songs"));
-    Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
-    return reactiveMongoTemplate.aggregate(aggregation, "singer", Singer.class);
-  }
-
-
-  public Flux<Singer> findAllSongsFromDateAndSinger(Date from, Singer singer) {
-    ArrayList<Criteria> orOperations = new ArrayList<>();
-    // All ids;
-    orOperations.add(Criteria.where("_id").is(singer.getId()));
-
-    Criteria orCriteria = new Criteria();
-    orCriteria.orOperator(orOperations.toArray(new Criteria[0]));
-
-    List<AggregationOperation> aggregationOperations = new ArrayList<>();
-    aggregationOperations.add(Aggregation.match(orCriteria));
-    aggregationOperations.add(Aggregation.unwind("songs"));
-    aggregationOperations.add(Aggregation.project().andExclude("songs.songs.video"));
-    aggregationOperations.add(project()
-      .andExpression("_id").as("_id")
-      .andExpression("$name").as("name")
-      .andExpression("like").as("like")
-      .andExpression("createdAt").as("createdAt")
-      .andExpression("updatedAt").as("updatedAt")
-      .andExpression("songs").as("songs")
-    );
-
-    aggregationOperations.add(Aggregation.match(Criteria.where("songs.updatedAt").gt(from)));
-    aggregationOperations.add(Aggregation.group("_id")
-      .first("name").as("name")
-      .first("like").as("like")
-      .first("createdAt").as("createdAt")
-      .first("updatedAt").as("updatedAt")
-      .addToSet("songs").as("songs"));
-
-    Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
-    return reactiveMongoTemplate.aggregate(aggregation, "singer", Singer.class);
-  }
-
-  public Flux<Singer> findAllSongsFromDateAndSingers(Date from, List<Singer> singers) {
-
-    ArrayList<Criteria> orOperations = new ArrayList<>();
-
-    // All ids;
-    for (Singer singer : singers) {
-      orOperations.add(Criteria.where("_id").is(singer.getId()));
-    }
-
-    Criteria orCriteria = new Criteria();
-    orCriteria.orOperator(orOperations.toArray(new Criteria[0]));
-
-    List<AggregationOperation> aggregationOperations = new ArrayList<>();
-    aggregationOperations.add(Aggregation.match(orCriteria));
-    aggregationOperations.add(Aggregation.unwind("songs"));
-    aggregationOperations.add(Aggregation.project().andExclude("songs.songs.video"));
-    aggregationOperations.add(project()
-      .andExpression("_id").as("_id")
-      .andExpression("$name").as("name")
-      .andExpression("like").as("like")
-      .andExpression("createdAt").as("createdAt")
-      .andExpression("updatedAt").as("updatedAt")
-      .andExpression("songs").as("songs")
-    );
-
-    aggregationOperations.add(Aggregation.match(Criteria.where("songs.updatedAt").gt(from)));
-    aggregationOperations.add(Aggregation.group("_id")
-      .first("name").as("name")
-      .first("like").as("like")
-      .first("createdAt").as("createdAt")
-      .first("updatedAt").as("updatedAt")
-      .addToSet("songs").as("songs"));
-    Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
-    return reactiveMongoTemplate.aggregate(aggregation, "singer", Singer.class);
-  }
-
-
-  public Flux<Singer> findAllVideoFromDateAndSongs(Date from, List<Singer> singers) {
-
-    ArrayList<Criteria> singerOrOperator = new ArrayList<>();
-    ArrayList<Criteria> songOrOperator = new ArrayList<>();
-
-    // All ids;
-    for (Singer singer : singers) {
-      singerOrOperator.add(Criteria.where("_id").is(singer.getId()));
-      for (Song song : singer.getSongs()) {
-        songOrOperator.add(Criteria.where("songs._id").is(song.getId()));
-      }
-    }
-
-    Criteria singerOrCriteria = new Criteria();
-    singerOrCriteria.orOperator(singerOrOperator.toArray(new Criteria[0]));
-
-    Criteria songOrCriteria = new Criteria();
-    songOrCriteria.orOperator(songOrOperator.toArray(new Criteria[0]));
-
-    List<AggregationOperation> aggregationOperations = new ArrayList<>();
-    aggregationOperations.add(Aggregation.match(singerOrCriteria));
-    aggregationOperations.add(Aggregation.unwind("songs"));
-    aggregationOperations.add(Aggregation.match(songOrCriteria));
-    aggregationOperations.add(Aggregation.unwind("songs.video"));
-    aggregationOperations.add(Aggregation.match(Criteria.where("songs.video.updatedAt").gt(from)));
-    aggregationOperations.add(Aggregation.group("songs._id")
-      .first("$$ROOT").as("root")
-      .push("songs.video").as("video"));
-    aggregationOperations.add(Aggregation.project()
-      .andExpression("root").as("root")
-      .andExpression("root.name").as("name")
-      .andExpression("root.like").as("like")
-      .and("songs").nested(bind("_id", "root.songs._id")
-        .and("name", "root.songs.name")
-        .and("lyrics", "root.songs.lyrics")
-        .and("like", "root.songs.like")
-        .and("view", "root.songs.view")
-        .and("video", "video")
-        .and("createdAt", "root.songs.createdAt")
-        .and("updatedAt", "root.songs.updatedAt")));
-
-    aggregationOperations.add(Aggregation.group("$root._id")
-      .first("root.name").as("name")
-      .first("root.like").as("like")
-      .push("songs").as("songs")
-      .first("root.createdAt").as("createdAt")
-      .first("root.updatedAt").as("updatedAt"));
-    Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
-
-    return reactiveMongoTemplate.aggregate(aggregation, "singer", Singer.class);
-  }
-
-  public Flux<Singer> findAllVideoBySongId(String songId) {
-
-    List<AggregationOperation> aggregationOperations = new ArrayList<>();
-
-    aggregationOperations.add(Aggregation.unwind("songs"));
-    aggregationOperations.add(Aggregation.unwind("songs.video"));
-    aggregationOperations.add(Aggregation.match(Criteria.where("songs._id").is(songId)));
-    aggregationOperations.add(Aggregation.group("songs._id")
-      .first("$$ROOT").as("root")
-      .push("songs.video").as("video"));
-    aggregationOperations.add(Aggregation.project()
-      .andExpression("root").as("root")
-      .andExpression("root.name").as("name")
-      .andExpression("root.like").as("like")
-      .and("songs").nested(bind("id", "root.songs.id")
-        .and("name", "root.songs.name")
-        .and("lyrics", "root.songs.lyrics")
-        .and("like", "root.songs.like")
-        .and("view", "root.songs.view")
-        .and("video", "video")));
-
-    aggregationOperations.add(Aggregation.group("$root._id")
-      .first("root.name").as("name")
-      .first("root.like").as("like")
-      .push("songs").as("songs")
-      .first("root.createdAt").as("createdAt")
-      .first("root.updatedAt").as("updatedAt"));
-    Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
-    return reactiveMongoTemplate.aggregate(aggregation, "singer", Singer.class);
-  }
-
-  public Flux<Singer> findAllVideoBySongIdAndFromDate(Date from, String songId) {
-    List<AggregationOperation> aggregationOperations = new ArrayList<>();
-
-    aggregationOperations.add(Aggregation.unwind("songs"));
-    aggregationOperations.add(Aggregation.match(Criteria.where("songs._id").is(songId)));
-    aggregationOperations.add(Aggregation.unwind("songs.video"));
-    aggregationOperations.add(Aggregation.match(Criteria.where("songs.video.updatedAt").gt(from)));
-    aggregationOperations.add(Aggregation.group("songs._id")
-      .first("$$ROOT").as("root")
-      .push("songs.video").as("video"));
-    aggregationOperations.add(Aggregation.project()
-      .andExpression("root").as("root")
-      .andExpression("root.name").as("name")
-      .andExpression("root.like").as("like")
-      .and("songs").nested(bind("id", "root.songs.id")
-        .and("name", "root.songs.name")
-        .and("lyrics", "root.songs.lyrics")
-        .and("like", "root.songs.like")
-        .and("view", "root.songs.view")
-        .and("video", "video")));
-
-    aggregationOperations.add(Aggregation.group("$root._id")
-      .first("root.name").as("name")
-      .first("root.like").as("like")
-      .push("songs").as("songs")
-      .first("root.createdAt").as("createdAt")
-      .first("root.updatedAt").as("updatedAt"));
-    Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
-
-    return reactiveMongoTemplate.aggregate(aggregation, "singer", Singer.class);
-
-  }
 
   public Mono<UpdateResult> insertSongToSingerByName(String name, Song song) {
 
@@ -351,6 +102,7 @@ public class SingerServiceImpl implements SingerService {
 
     Update update = new Update();
     update.addToSet("songs", song);
+    song.setSingerId(id);
     update.currentDate("updatedAt");
 
     return reactiveMongoTemplate.updateFirst(Query.query(Criteria.where("_id").is(id)),
@@ -375,6 +127,7 @@ public class SingerServiceImpl implements SingerService {
     update.currentDate("updatedAt");
 
     for (Song song : songs) {
+      song.setSingerId(id);
       update.addToSet("songs", song);
     }
     return reactiveMongoTemplate.updateFirst(Query.query(Criteria.where("_id").is(id)),
@@ -397,9 +150,9 @@ public class SingerServiceImpl implements SingerService {
 
     update.currentDate("updatedAt");
     update.currentDate("songs.$.updatedAt");
+    video.setSongId(songId);
     update.addToSet("songs.$.video", video);
     Query query = new Query(Criteria.where("_id").is(singerId).andOperator(Criteria.where("songs._id").is(songId)));
-
     return reactiveMongoTemplate.updateFirst(query, update, "singer");
   }
 

@@ -25,23 +25,10 @@ public interface SingerService {
 
   Flux<Singer> findSingersByName(String name);
 
-  Flux<Singer> findAllSongsFromSingers(List<Singer> singers);
-
   Flux<Singer> findAllNewSinger(Date from);
-
-  Flux<Singer> findAllSongsFromSinger(Singer singers);
 
   Flux<Singer> findAllSingersFromDate(Date from);
 
-  Flux<Singer> findAllSongsFromDateAndSingers(Date from, List<Singer> singers);
-
-  Flux<Singer> findAllSongsFromDateAndSinger(Date from, Singer singers);
-
-  Flux<Singer> findAllVideoFromDateAndSongs(Date from, List<Singer> songs);
-
-  Flux<Singer> findAllVideoBySongId(String songId);
-
-  Flux<Singer> findAllVideoBySongIdAndFromDate(Date from, String songId);
 
   Mono<UpdateResult> insertSongToSingerByName(String name, Song song);
 

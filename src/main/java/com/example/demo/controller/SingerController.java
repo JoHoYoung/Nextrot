@@ -18,7 +18,7 @@ import javax.xml.ws.Response;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/singer")
+@RequestMapping("/api/v1/singers")
 public class SingerController {
 
   @Autowired
@@ -27,64 +27,50 @@ public class SingerController {
   DateHelper dateHelper;
 
   @GetMapping("/new")
-  public Mono<ResponseEntity<BaseResponse>> getNewSinger(@RequestParam("from")String date){
+  public Mono<ResponseEntity<BaseResponse>> getNewSinger(@RequestParam("from") String date) {
     Date from = dateHelper.StingToDate(date);
-    return singerService.findAllNewSinger(from).collectList().map(data -> {
-
-      if(data.isEmpty()){
-        throw new EmptyDataException(ErrorCode.EMPTY_DATA_SET);
-      }
-
-      final BaseResponse response = new DataListResponse<>(200,"success", data);
-      return new ResponseEntity<>(response, HttpStatus.OK);
-
-    });
+    return singerService.findAllNewSinger(from).switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.EMPTY_DATA_SET)))
+      .collectList().map(data -> {
+        final BaseResponse response = new DataListResponse<>(200, "success", data);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+      });
   }
 
   @GetMapping("/list")
-  public Mono<ResponseEntity<BaseResponse>> getAllSinger(){
-    return singerService.findAllSingers().collectList().map(data -> {
-
-      if(data.isEmpty()){
-        throw new EmptyDataException(ErrorCode.EMPTY_DATA_SET);
-      }
-
-      final BaseResponse response = new DataListResponse<>(200, "success", data);
-      return new ResponseEntity<>(response, HttpStatus.OK);
-    });
+  public Mono<ResponseEntity<BaseResponse>> getAllSinger() {
+    return singerService.findAllSingers().switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.EMPTY_DATA_SET)))
+      .collectList()
+      .map(data -> {
+        final BaseResponse response = new DataListResponse<>(200, "success", data);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+      });
   }
 
-  @GetMapping("/allData")
+  @GetMapping("/metadata")
   public Mono<ResponseEntity<BaseResponse>> getAllSingerData() {
-    return singerService.findAllData().collectList().map(data -> {
-
-      if(data.isEmpty()){
-        throw new EmptyDataException(ErrorCode.EMPTY_DATA_SET);
-      }
-
-      final BaseResponse baseResponse = new DataListResponse<>(200, "success", data);
-      return new ResponseEntity<>(baseResponse, HttpStatus.OK);
-    });
+    return singerService.findAllData().switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.EMPTY_DATA_SET)))
+      .collectList()
+      .map(data -> {
+        final BaseResponse baseResponse = new DataListResponse<>(200, "success", data);
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+      });
   }
 
   @GetMapping("/updated")
   public Mono<ResponseEntity<BaseResponse>> getUpdateSingerData(@RequestParam("from") String date) {
 
     Date from = dateHelper.StingToDate(date);
-    return singerService.findAllSingersFromDate(from).collectList().map(data -> {
-
-      if(data.isEmpty()){
-        throw new EmptyDataException(ErrorCode.EMPTY_DATA_SET);
-      }
-
-      final BaseResponse baseResponse = new DataListResponse<>(200, "success", data);
-      return new ResponseEntity<>(baseResponse, HttpStatus.OK);
-    });
+    return singerService.findAllSingersFromDate(from).switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.EMPTY_DATA_SET)))
+      .collectList()
+      .map(data -> {
+        final BaseResponse baseResponse = new DataListResponse<>(200, "success", data);
+        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+      });
   }
 
   @GetMapping("/{singerId}")
   public Mono<ResponseEntity<BaseResponse>> getSingerById(@PathVariable("singerId") String singerId) {
-    return singerService.findOneById(singerId).switchIfEmpty().map(data -> {
+    return singerService.findOneById(singerId).switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.INVALID_KEY))).map(data -> {
 
       final BaseResponse response = new DataResponse<>(200, "success", data);
       return new ResponseEntity<>(response, HttpStatus.OK);
