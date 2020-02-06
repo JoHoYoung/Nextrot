@@ -40,6 +40,8 @@ public interface SingerService {
 
   Mono<UpdateResult> insertVideoToSong(String singerId, String songId, Video video);
 
+  Mono<UpdateResult> likeToSingerById(String singerId);
+
   Mono<Void> deleteSingerById(String id);
 
   Mono<DeleteResult> deleteSingerByName(String name);

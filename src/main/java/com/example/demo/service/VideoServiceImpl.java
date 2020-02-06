@@ -3,13 +3,17 @@ package com.example.demo.service;
 import com.example.demo.model.Singer;
 import com.example.demo.model.Song;
 import com.example.demo.model.Video;
+import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -94,6 +98,17 @@ public class VideoServiceImpl implements VideoService {
     Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
     return reactiveMongoTemplate.aggregate(aggregation, "singer", Video.class);
 
+  }
+
+  public Mono<UpdateResult> likeVideoById(String singerId, String songId, String videoId){
+    Update update = new Update();
+    update.inc("songs.$[i].video.$[j].like", 1);
+    update.filterArray("i._id", songId);
+    update.filterArray("j._id", videoId);
+
+    return reactiveMongoTemplate.updateFirst(Query.query(Criteria.where("_id").is(singerId)
+    .andOperator(Criteria.where("songs._id").is(songId))
+    .andOperator(Criteria.where("songs.video._id").is(videoId))), update, "singer");
   }
 
 }

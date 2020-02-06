@@ -2,13 +2,17 @@ package com.example.demo.service;
 
 import com.example.demo.model.Singer;
 import com.example.demo.model.Song;
+import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -140,6 +144,14 @@ public class SongServiceImpl implements SongService{
       .andExpression("songs.updatedAt").as("updatedAt"));
     Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
     return reactiveMongoTemplate.aggregate(aggregation, "singer", Song.class);
+  }
+
+  public Mono<UpdateResult> likeToSongById(String singerId, String songId){
+
+    Update update = new Update();
+    update.inc("songs.$.like", 1);
+    return reactiveMongoTemplate.updateFirst(Query.query(Criteria.where("_id").is(singerId)
+      .andOperator(Criteria.where("songs._id").is(songId))), update, "singer");
   }
 
 }

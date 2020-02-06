@@ -10,6 +10,8 @@ public enum ErrorCode {
   JWT_TOKEN_EXPIRED(731,"C001","Token Expired"),
   INVALID_TOKEN(732,"C002","Invalid Token"),
   EMPTY_TOKEN(733,"C003","Empty Token"),
+
+  DUPLICATED_LIKE(741, "D001", "Duplicate Like cannot be done"),
   DECODED_TOKEN_PARSE_ERROR(431,"A004","Error at Parse decoded Token");
 
   private final String statusCode;

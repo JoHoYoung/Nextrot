@@ -4,6 +4,7 @@ import com.example.demo.model.Singer;
 import com.example.demo.model.Song;
 import com.example.demo.model.Video;
 import com.example.demo.repository.SingerRespository;
+import com.example.demo.model.Like;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.bind;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 
 @Service
@@ -87,7 +87,6 @@ public class SingerServiceImpl implements SingerService {
   }
 
 
-
   public Mono<UpdateResult> insertSongToSingerByName(String name, Song song) {
 
     Update update = new Update();
@@ -117,6 +116,7 @@ public class SingerServiceImpl implements SingerService {
     for (Song song : songs) {
       update.addToSet("songs", song);
     }
+
     return reactiveMongoTemplate.updateFirst(Query.query(Criteria.where("name").is(name)),
       update, "singer");
   }
@@ -155,5 +155,12 @@ public class SingerServiceImpl implements SingerService {
     Query query = new Query(Criteria.where("_id").is(singerId).andOperator(Criteria.where("songs._id").is(songId)));
     return reactiveMongoTemplate.updateFirst(query, update, "singer");
   }
+
+  public Mono<UpdateResult> likeToSingerById(String singerId){
+    Update update =  new Update();
+    update.inc("like", 1);
+    return reactiveMongoTemplate.updateFirst(Query.query(Criteria.where("_id").is(singerId)),update, "singer");
+  }
+
 
 }
