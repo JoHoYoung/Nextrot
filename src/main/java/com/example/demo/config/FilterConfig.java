@@ -1,10 +1,11 @@
 package com.example.demo.config;
 
+import com.example.demo.ErrorCode;
+import com.example.demo.exception.TokenInvalidException;
+import com.example.demo.service.AuthService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.server.HandlerFilterFunction;
-import org.springframework.web.reactive.function.server.HandlerFunction;
-import org.springframework.web.reactive.function.server.ServerRequest;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
@@ -15,10 +16,29 @@ import java.util.List;
 @Component
 public class FilterConfig implements WebFilter {
 
-  public Mono<Void> filter(ServerWebExchange serverWebExchange, WebFilterChain webFilterChain){
-    List<String> authHeaders = serverWebExchange.getRequest().getHeaders().get("Authorization");
-    String token = authHeaders.get(0);
+  @Autowired
+  ObjectMapper objectMapper;
 
-    return webFilterChain.filter(serverWebExchange);
+  @Autowired
+  AuthService authService;
+
+  String[] excludePatterns = new String[]{"/api/v1/auth/token"};
+
+  public Mono<Void> filter(ServerWebExchange serverWebExchange, WebFilterChain webFilterChain) {
+    for (String excludePattern : this.excludePatterns) {
+      if (serverWebExchange.getRequest().getPath().toString().matches(excludePattern)) {
+        return webFilterChain.filter(serverWebExchange);
+      }
+    }
+    try {
+      List<String> authHeaders = serverWebExchange.getRequest()
+        .getHeaders().get("Authorization");
+      String token = authHeaders.get(0).split(" ")[1];
+      Object decoded = authService.decode(token).block();
+      serverWebExchange.getAttributes().putIfAbsent("session", decoded);
+      return webFilterChain.filter(serverWebExchange);
+    } catch (NullPointerException e) {
+      throw new TokenInvalidException(ErrorCode.EMPTY_TOKEN);
+    }
   }
 }

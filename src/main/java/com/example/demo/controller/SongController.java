@@ -41,7 +41,6 @@ public class SongController {
     Date from = dateHelper.StingToDate(date);
     return singerService.findAllSingersFromDate(from).collectList().map(singers -> {
       return songService.findAllSongsFromDateAndSingers(from, singers).collectList().map(data -> {
-        System.out.println(data);
         final BaseResponse response = new DataListResponse<>(200, "success", data);
         return new ResponseEntity(response, HttpStatus.OK);
       }).block();

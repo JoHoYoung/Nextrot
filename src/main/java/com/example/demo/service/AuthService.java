@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Date;
 
-public interface AuthService {
+public interface AuthService<T> {
 
   Mono<String> genAccessToken(Object subject);
 
@@ -16,6 +16,6 @@ public interface AuthService {
 
   Mono<Void> verifyToken(String token);
 
-  Mono<String> decode(String token);
+  Mono<T> decode(String token);
 
 }
