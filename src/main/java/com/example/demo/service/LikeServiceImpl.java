@@ -17,8 +17,8 @@ public class LikeServiceImpl implements LikeService{
     return likeRepository.save(like);
   }
 
-  public Flux<Like> findByTypeAndUid(String type, String UID){
-    return likeRepository.findByTypeAndUid(type, UID);
+  public Flux<Like> findByTypeAndUidAndTargetId(String type, String UID, String targetId){
+    return likeRepository.findByTypeAndUidAndTargetId(type, UID, targetId);
   }
 
 }

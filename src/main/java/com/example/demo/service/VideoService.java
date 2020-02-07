@@ -19,4 +19,6 @@ public interface VideoService {
 
   Mono<UpdateResult> likeVideoById(String singerId, String songId, String videoId);
 
+  Mono<UpdateResult> viewSongById(String singerId, String songId,String videoId);
+
 }

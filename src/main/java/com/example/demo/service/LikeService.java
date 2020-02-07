@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 
 public interface LikeService {
 
-  Flux<Like> findByTypeAndUid(String type, String UID);
+  Flux<Like> findByTypeAndUidAndTargetId(String type, String UID, String targetId);
 
   Mono<Like> createLike(Like like);
 }

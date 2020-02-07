@@ -18,9 +18,11 @@ public class Like {
   private String id;
   private String type;
   private String UID;
+  private String targetId;
 
-  public Like(String type, String UID){
+  public Like(String type, String UID, String targetId){
     this.type = type;
     this.UID = UID;
+    this.targetId = targetId;
   }
 }

@@ -154,4 +154,11 @@ public class SongServiceImpl implements SongService{
       .andOperator(Criteria.where("songs._id").is(songId))), update, "singer");
   }
 
+  public Mono<UpdateResult> viewSongById(String singerId, String songId){
+    Update update = new Update();
+    update.inc("songs.$.view", 1);
+    return reactiveMongoTemplate.updateFirst(Query.query(Criteria.where("_id").is(singerId)
+    .andOperator(Criteria.where("songs._id").is(songId))), update, "singer");
+  }
+
 }

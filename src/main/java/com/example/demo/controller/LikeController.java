@@ -35,9 +35,9 @@ public class LikeController {
 
   @RequestMapping("/singer/{singerId}")
   public Mono<ResponseEntity<BaseResponse>> likeToSinger(@RequestAttribute("session")Session session, @PathVariable("singerId")String singerId){
-    return likeService.findByTypeAndUid("singer", session.getUID()).map(el -> {
+    return likeService.findByTypeAndUidAndTargetId("singer", session.getUID(), singerId).map(el -> {
       throw new UnAuthorizedAccessException(ErrorCode.DUPLICATED_LIKE);
-    }).switchIfEmpty(Flux.merge(likeService.createLike(new Like("singer", session.getUID())),
+    }).switchIfEmpty(Flux.merge(likeService.createLike(new Like("singer", session.getUID(), singerId)),
       singerService.likeToSingerById(singerId)
       )).collectList().map(el -> {
         final BaseResponse response = new BaseResponse(200, "success");
@@ -45,26 +45,29 @@ public class LikeController {
     });
   }
 
-  @RequestMapping("/singer/{sigerId}/song/{songId}")
+  @RequestMapping("/singer/{singerId}/song/{songId}")
   public Mono<ResponseEntity<BaseResponse>> likeToSong(@RequestAttribute("session")Session session,
-                                                       @PathVariable("singerId")String singerId, @PathVariable("songId")String songId){
-    return likeService.findByTypeAndUid("song", session.getUID()).map(el -> {
+                                                       @PathVariable("singerId")String singerId,
+                                                       @PathVariable("songId")String songId){
+    return likeService.findByTypeAndUidAndTargetId("song", session.getUID(), songId).map(el -> {
       throw new UnAuthorizedAccessException(ErrorCode.DUPLICATED_LIKE);
-    }).switchIfEmpty(Flux.merge(likeService.createLike(new Like("song", session.getUID())), songService.likeToSongById(singerId, songId))
+    }).switchIfEmpty(Flux.merge(likeService.createLike(new Like("song", session.getUID(), songId)),
+      songService.likeToSongById(singerId, songId)))
       .collectList().map(el -> {
         final BaseResponse response = new BaseResponse(200, "success");
         return new ResponseEntity<>(response, HttpStatus.OK);
       });
+
   }
 
-  @RequestMapping("/singer/{sigerId}/song/{songId}/video/{videoId}")
+  @RequestMapping("/singer/{singerId}/song/{songId}/video/{videoId}")
   public Mono<ResponseEntity<BaseResponse>> likeToVideo(@RequestAttribute("session")Session session,
                                                         @PathVariable("singerId")String singerId,
                                                         @PathVariable("songId")String songId,
                                                         @PathVariable("videoId")String videoId){
-    return likeService.findByTypeAndUid("video", session.getUID()).map(el -> {
+    return likeService.findByTypeAndUidAndTargetId("video", session.getUID(), videoId).map(el -> {
       throw new UnAuthorizedAccessException(ErrorCode.DUPLICATED_LIKE);
-    }).switchIfEmpty(Flux.merge(likeService.createLike(new Like("video", session.getUID())),
+    }).switchIfEmpty(Flux.merge(likeService.createLike(new Like("video", session.getUID(), videoId)),
       videoService.likeVideoById(singerId, songId, videoId)))
       .collectList().map(el -> {
         final BaseResponse response = new BaseResponse(200, "success");

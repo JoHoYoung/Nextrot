@@ -20,5 +20,5 @@ public interface SongService {
 
   Mono<UpdateResult> likeToSongById(String singerId, String songId);
 
-
+  Mono<UpdateResult> viewSongById(String singerId, String songId);
 }

@@ -67,6 +67,7 @@ public class AuthServiceJwtImpl implements AuthService<Session> {
   public Mono<Session> decode(String token) {
     try {
       Claims Claim = Jwts.parser().setSigningKey(SALT).parseClaimsJws(token).getBody();
+      System.out.println(Claim.getSubject());
       Session session = objectMapper.readValue(Claim.getSubject(), Session.class);
       return Mono.just(session);
     } catch (JsonProcessingException e) {

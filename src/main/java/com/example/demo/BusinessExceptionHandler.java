@@ -1,7 +1,6 @@
 package com.example.demo;
 
-import com.example.demo.exception.DateParseException;
-import com.example.demo.exception.EmptyDataException;
+import com.example.demo.exception.*;
 import com.example.demo.response.BaseResponse;
 import com.example.demo.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -20,6 +19,21 @@ public class BusinessExceptionHandler {
   @ExceptionHandler(DateParseException.class)
   public ResponseEntity<ErrorResponse> DateParseExceptionHandler(DateParseException e){
     return new ResponseEntity<>(new ErrorResponse(e), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(TokenExpiredException.class)
+  public ResponseEntity<ErrorResponse> TokenExpiredExceptionHandler(TokenExpiredException e){
+    return new ResponseEntity<>(new ErrorResponse(e), HttpStatus.FORBIDDEN);
+  }
+
+  @ExceptionHandler(TokenInvalidException.class)
+  public ResponseEntity<ErrorResponse> TokenInvalidExceptionHandler(TokenInvalidException e){
+    return new ResponseEntity<>(new ErrorResponse(e), HttpStatus.FORBIDDEN);
+  }
+
+  @ExceptionHandler(UnAuthorizedAccessException.class)
+  public ResponseEntity<ErrorResponse> UnAuthorizedAccessExceptionHandler(UnAuthorizedAccessException e){
+    return new ResponseEntity<>(new ErrorResponse(e), HttpStatus.UNAUTHORIZED);
   }
 
 }

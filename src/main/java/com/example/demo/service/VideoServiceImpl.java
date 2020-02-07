@@ -57,7 +57,7 @@ public class VideoServiceImpl implements VideoService {
       .andExpression("songs.video.view").as("view")
       .andExpression("songs.video.createdAt").as("createdAt")
       .andExpression("songs.video.updatedAt").as("updatedAt")
-    .andExpression("songs._id").as("songId"));
+      .andExpression("songs._id").as("songId"));
     Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
 
     return reactiveMongoTemplate.aggregate(aggregation, "singer", Video.class);
@@ -100,15 +100,36 @@ public class VideoServiceImpl implements VideoService {
 
   }
 
-  public Mono<UpdateResult> likeVideoById(String singerId, String songId, String videoId){
+  public Mono<UpdateResult> likeVideoById(String singerId, String songId, String videoId) {
     Update update = new Update();
     update.inc("songs.$[i].video.$[j].like", 1);
     update.filterArray("i._id", songId);
     update.filterArray("j._id", videoId);
+    ArrayList<Criteria> idAndOperator = new ArrayList<>();
+    idAndOperator.add(Criteria.where("_id").is(singerId));
+    idAndOperator.add(Criteria.where("songs._id").is(songId));
+    idAndOperator.add(Criteria.where("songs.video._id").is(videoId));
 
-    return reactiveMongoTemplate.updateFirst(Query.query(Criteria.where("_id").is(singerId)
-    .andOperator(Criteria.where("songs._id").is(songId))
-    .andOperator(Criteria.where("songs.video._id").is(videoId))), update, "singer");
+    Criteria idAndCriteria = new Criteria();
+    idAndCriteria.andOperator(idAndOperator.toArray(new Criteria[0]));
+
+    return reactiveMongoTemplate.updateFirst(Query.query(idAndCriteria), update, "singer");
+  }
+
+  public Mono<UpdateResult> viewSongById(String singerId, String songId, String videoId) {
+    Update update = new Update();
+    update.inc("songs.$[i].video.$[j].view", 1);
+    update.filterArray("i._id", songId);
+    update.filterArray("j._id", videoId);
+    ArrayList<Criteria> idAndOperator = new ArrayList<>();
+    idAndOperator.add(Criteria.where("_id").is(singerId));
+    idAndOperator.add(Criteria.where("songs._id").is(songId));
+    idAndOperator.add(Criteria.where("songs.video._id").is(videoId));
+
+    Criteria idAndCriteria = new Criteria();
+    idAndCriteria.andOperator(idAndOperator.toArray(new Criteria[0]));
+
+    return reactiveMongoTemplate.updateFirst(Query.query(idAndCriteria), update, "singer");
   }
 
 }
