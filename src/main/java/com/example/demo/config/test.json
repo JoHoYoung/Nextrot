@@ -1,102 +1,301 @@
-[
-  {
-    "id": "5e328f15b7e4937f52c67679",
-    "name": "HoYoung",
-    "songs": [
-      {
-        "id": "32f3156c-ed37-40dc-af96-dcbf53a84a58",
-        "singerId": null,
-        "name": "testName",
-        "lyrics": "testLyrics",
-        "like": 0,
-        "view": 0,
-        "video": [
-          {
-            "id": "1255c77b-f3f6-466a-bd1a-0124555e5592",
-            "songId": null,
-            "key": null,
-            "like": 0,
-            "view": 0,
-            "createdAt": "2020-01-30T08:11:06.934+0000",
-            "updatedAt": "2020-01-30T08:11:06.934+0000"
-          },
-          {
-            "id": "f08a433a-e120-459f-8bf1-1f55081dbf82",
-            "songId": null,
-            "key": null,
-            "like": 0,
-            "view": 0,
-            "createdAt": "2020-01-30T11:54:32.761+0000",
-            "updatedAt": "2020-01-30T11:54:32.761+0000"
-          }
-        ],
-        "createdAt": "2020-01-30T08:08:53.877+0000",
-        "updatedAt": "2020-01-30T11:54:32.894+0000"
-      },
-      {
-        "id": "36483ebb-ec5b-442f-9487-1c785370b56d",
-        "singerId": null,
-        "name": "Music2",
-        "lyrics": "Musice2Lyrics",
-        "like": 0,
-        "view": 0,
-        "video": [
-          {
-            "id": "281981c1-56c7-476a-88a9-e29ab9074552",
-            "songId": null,
-            "key": null,
-            "like": 0,
-            "view": 0,
-            "createdAt": "2020-01-30T11:55:38.930+0000",
-            "updatedAt": "2020-01-30T11:55:38.930+0000"
-          },
-          {
-            "id": "10b45e54-6a09-4c83-8110-830e2acd5673",
-            "songId": null,
-            "key": null,
-            "like": 0,
-            "view": 0,
-            "createdAt": "2020-01-30T11:55:39.013+0000",
-            "updatedAt": "2020-01-30T11:55:39.013+0000"
-          }
-        ],
-        "createdAt": "2020-01-30T11:52:37.216+0000",
-        "updatedAt": "2020-01-30T11:55:39.058+0000"
-      }
-    ],
-    "like": 0,
-    "createdAt": "2020-01-30T08:08:53.877+0000",
-    "updatedAt": "2020-01-30T11:55:39.058+0000"
-  },
-  {
-    "id": "5e32c8cc50823b60f80758e5",
-    "name": "SangHo",
-    "songs": [
-      {
-        "id": "54720f92-7541-4e3a-8881-f65a5fc6b5cb",
-        "singerId": null,
-        "name": "Music2",
-        "lyrics": "Musice2Lyrics",
-        "like": 0,
-        "view": 0,
-        "video": null,
-        "createdAt": "2020-01-30T13:00:20.871+0000",
-        "updatedAt": "2020-01-30T13:00:20.871+0000"
-      },
-      {
-        "id": "257fc494-cf09-4685-aa49-a81f2d7ae3cd",
-        "singerId": null,
-        "name": "Music2",
-        "lyrics": "Musice2Lyrics",
-        "like": 0,
-        "view": 0,
-        "video": null,
-        "createdAt": "2020-01-30T13:00:20.787+0000",
-        "updatedAt": "2020-01-30T13:00:20.787+0000"
-      }
-    ],
-    "like": 0,
-    "createdAt": "2020-01-30T12:15:07.954+0000",
-    "updatedAt": "2020-01-30T13:00:20.910+0000"
-  }
-]
+{
+  "cause": null,
+  "stackTrace": [
+    {
+      "methodName": "filter",
+      "fileName": "FilterConfig.java",
+      "lineNumber": 41,
+      "className": "com.example.demo.config.FilterConfig",
+      "nativeMethod": false
+    }
+  ],
+  "errorCode": "EMPTY_TOKEN",
+  "status": 733,
+  "statusCode": "C003",
+  "statusMsg": "Empty Token",
+  "message": null,
+  "localizedMessage": null,
+  "suppressed": [
+    {
+      "cause": null,
+      "stackTrace": [
+        {
+          "methodName": "filter",
+          "fileName": "FilterConfig.java",
+          "lineNumber": 41,
+          "className": "com.example.demo.config.FilterConfig",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "invokeFilter",
+          "fileName": "DefaultWebFilterChain.java",
+          "lineNumber": 127,
+          "className": "org.springframework.web.server.handler.DefaultWebFilterChain",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "lambda$filter$0",
+          "fileName": "DefaultWebFilterChain.java",
+          "lineNumber": 121,
+          "className": "org.springframework.web.server.handler.DefaultWebFilterChain",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "subscribe",
+          "fileName": "MonoDefer.java",
+          "lineNumber": 44,
+          "className": "reactor.core.publisher.MonoDefer",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "subscribe",
+          "fileName": "Mono.java",
+          "lineNumber": 4105,
+          "className": "reactor.core.publisher.Mono",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "drain",
+          "fileName": "MonoIgnoreThen.java",
+          "lineNumber": 172,
+          "className": "reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "subscribe",
+          "fileName": "MonoIgnoreThen.java",
+          "lineNumber": 56,
+          "className": "reactor.core.publisher.MonoIgnoreThen",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "subscribe",
+          "fileName": "InternalMonoOperator.java",
+          "lineNumber": 55,
+          "className": "reactor.core.publisher.InternalMonoOperator",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "onStateChange",
+          "fileName": "HttpServerHandle.java",
+          "lineNumber": 64,
+          "className": "reactor.netty.http.server.HttpServerHandle",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "onStateChange",
+          "fileName": "TcpServerBind.java",
+          "lineNumber": 228,
+          "className": "reactor.netty.tcp.TcpServerBind$ChildObserver",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "onInboundNext",
+          "fileName": "HttpServerOperations.java",
+          "lineNumber": 465,
+          "className": "reactor.netty.http.server.HttpServerOperations",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "channelRead",
+          "fileName": "ChannelOperationsHandler.java",
+          "lineNumber": 90,
+          "className": "reactor.netty.channel.ChannelOperationsHandler",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "invokeChannelRead",
+          "fileName": "AbstractChannelHandlerContext.java",
+          "lineNumber": 377,
+          "className": "io.netty.channel.AbstractChannelHandlerContext",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "invokeChannelRead",
+          "fileName": "AbstractChannelHandlerContext.java",
+          "lineNumber": 363,
+          "className": "io.netty.channel.AbstractChannelHandlerContext",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "fireChannelRead",
+          "fileName": "AbstractChannelHandlerContext.java",
+          "lineNumber": 355,
+          "className": "io.netty.channel.AbstractChannelHandlerContext",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "channelRead",
+          "fileName": "HttpTrafficHandler.java",
+          "lineNumber": 167,
+          "className": "reactor.netty.http.server.HttpTrafficHandler",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "invokeChannelRead",
+          "fileName": "AbstractChannelHandlerContext.java",
+          "lineNumber": 377,
+          "className": "io.netty.channel.AbstractChannelHandlerContext",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "invokeChannelRead",
+          "fileName": "AbstractChannelHandlerContext.java",
+          "lineNumber": 363,
+          "className": "io.netty.channel.AbstractChannelHandlerContext",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "fireChannelRead",
+          "fileName": "AbstractChannelHandlerContext.java",
+          "lineNumber": 355,
+          "className": "io.netty.channel.AbstractChannelHandlerContext",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "fireChannelRead",
+          "fileName": "CombinedChannelDuplexHandler.java",
+          "lineNumber": 436,
+          "className": "io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "fireChannelRead",
+          "fileName": "ByteToMessageDecoder.java",
+          "lineNumber": 321,
+          "className": "io.netty.handler.codec.ByteToMessageDecoder",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "channelRead",
+          "fileName": "ByteToMessageDecoder.java",
+          "lineNumber": 295,
+          "className": "io.netty.handler.codec.ByteToMessageDecoder",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "channelRead",
+          "fileName": "CombinedChannelDuplexHandler.java",
+          "lineNumber": 251,
+          "className": "io.netty.channel.CombinedChannelDuplexHandler",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "invokeChannelRead",
+          "fileName": "AbstractChannelHandlerContext.java",
+          "lineNumber": 377,
+          "className": "io.netty.channel.AbstractChannelHandlerContext",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "invokeChannelRead",
+          "fileName": "AbstractChannelHandlerContext.java",
+          "lineNumber": 363,
+          "className": "io.netty.channel.AbstractChannelHandlerContext",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "fireChannelRead",
+          "fileName": "AbstractChannelHandlerContext.java",
+          "lineNumber": 355,
+          "className": "io.netty.channel.AbstractChannelHandlerContext",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "channelRead",
+          "fileName": "DefaultChannelPipeline.java",
+          "lineNumber": 1410,
+          "className": "io.netty.channel.DefaultChannelPipeline$HeadContext",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "invokeChannelRead",
+          "fileName": "AbstractChannelHandlerContext.java",
+          "lineNumber": 377,
+          "className": "io.netty.channel.AbstractChannelHandlerContext",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "invokeChannelRead",
+          "fileName": "AbstractChannelHandlerContext.java",
+          "lineNumber": 363,
+          "className": "io.netty.channel.AbstractChannelHandlerContext",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "fireChannelRead",
+          "fileName": "DefaultChannelPipeline.java",
+          "lineNumber": 919,
+          "className": "io.netty.channel.DefaultChannelPipeline",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "read",
+          "fileName": "AbstractNioByteChannel.java",
+          "lineNumber": 163,
+          "className": "io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "processSelectedKey",
+          "fileName": "NioEventLoop.java",
+          "lineNumber": 714,
+          "className": "io.netty.channel.nio.NioEventLoop",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "processSelectedKeysOptimized",
+          "fileName": "NioEventLoop.java",
+          "lineNumber": 650,
+          "className": "io.netty.channel.nio.NioEventLoop",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "processSelectedKeys",
+          "fileName": "NioEventLoop.java",
+          "lineNumber": 576,
+          "className": "io.netty.channel.nio.NioEventLoop",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "run",
+          "fileName": "NioEventLoop.java",
+          "lineNumber": 493,
+          "className": "io.netty.channel.nio.NioEventLoop",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "run",
+          "fileName": "SingleThreadEventExecutor.java",
+          "lineNumber": 989,
+          "className": "io.netty.util.concurrent.SingleThreadEventExecutor$4",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "run",
+          "fileName": "ThreadExecutorMap.java",
+          "lineNumber": 74,
+          "className": "io.netty.util.internal.ThreadExecutorMap$2",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "run",
+          "fileName": "FastThreadLocalRunnable.java",
+          "lineNumber": 30,
+          "className": "io.netty.util.concurrent.FastThreadLocalRunnable",
+          "nativeMethod": false
+        },
+        {
+          "methodName": "run",
+          "fileName": "Thread.java",
+          "lineNumber": 748,
+          "className": "java.lang.Thread",
+          "nativeMethod": false
+        }
+      ],
+      "message": "\nError has been observed at the following site(s):\n\t|_ checkpoint ⇢ HTTP GET \"/api/v1/singers/new?from=2019:01-01-00:00:00\" [ExceptionHandlingWebHandler]\nStack trace:",
+      "localizedMessage": "\nError has been observed at the following site(s):\n\t|_ checkpoint ⇢ HTTP GET \"/api/v1/singers/new?from=2019:01-01-00:00:00\" [ExceptionHandlingWebHandler]\nStack trace:",
+      "suppressed": []
+    }
+  ]
+}

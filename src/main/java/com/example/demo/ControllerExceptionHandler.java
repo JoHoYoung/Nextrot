@@ -3,13 +3,14 @@ package com.example.demo;
 import com.example.demo.exception.*;
 import com.example.demo.response.BaseResponse;
 import com.example.demo.response.ErrorResponse;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class BusinessExceptionHandler {
+public class ControllerExceptionHandler {
 
   @ExceptionHandler(EmptyDataException.class)
   public ResponseEntity<ErrorResponse> EmptyDataExceptionHandler(EmptyDataException e){

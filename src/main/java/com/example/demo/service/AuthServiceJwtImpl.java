@@ -27,7 +27,6 @@ public class AuthServiceJwtImpl implements AuthService<Session> {
 
   public Mono<String> genAccessToken(Object subject) {
     try{
-
       Date Now = new Date();
       Date expireTime = new Date(Now.getTime() + 1000 * 60 * 60 * 24 * 14);
       String jwt = Jwts.builder()
@@ -73,6 +72,8 @@ public class AuthServiceJwtImpl implements AuthService<Session> {
     } catch (JsonProcessingException e) {
       throw new TokenInvalidException(ErrorCode.INVALID_TOKEN);
     } catch (IOException e) {
+      throw new TokenInvalidException(ErrorCode.INVALID_TOKEN);
+    } catch (MalformedJwtException e){
       throw new TokenInvalidException(ErrorCode.INVALID_TOKEN);
     }
   }
