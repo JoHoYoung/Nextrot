@@ -13,14 +13,13 @@ import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 
 @Configuration
-@EnableReactiveMongoRepositories(basePackages = "com.example.demo")
+@EnableReactiveMongoRepositories(basePackages = "com.example.demo", reactiveMongoTemplateRef = "reactiveMongoTemplate")
 public class MongoConfig {
 
   @Bean
   public SimpleReactiveMongoDatabaseFactory ReactiveMongoDatabaseFactory(MongoClient mongoClient) {
-    return new SimpleReactiveMongoDatabaseFactory(mongoClient, "singer");
+    return new SimpleReactiveMongoDatabaseFactory(mongoClient, "nextrot");
   }
-
   @Bean(name = "reactiveMongoTemplate")
   public ReactiveMongoTemplate ReactiveMongoTemplate(ReactiveMongoDatabaseFactory reactiveMongoDatabaseFactory,
                                                          MongoConverter converter) {

@@ -19,9 +19,9 @@ public interface SingerService {
 
   Mono<Singer> findOneById(String id);
 
-  Flux<Singer> findAllData();
+  Flux<Singer> findAllData(int page);
 
-  Flux<Singer> findAllSingers();
+  Flux<Singer> findAllSingers((int page);
 
   Flux<Singer> findSingersByName(String name);
 

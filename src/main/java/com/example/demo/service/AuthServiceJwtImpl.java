@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 
 import com.example.demo.ErrorCode;
+import com.example.demo.exception.InvalidParameterException;
 import com.example.demo.exception.TokenExpiredException;
 import com.example.demo.exception.TokenInvalidException;
 import com.example.demo.model.Session;
@@ -25,7 +26,7 @@ public class AuthServiceJwtImpl implements AuthService<Session> {
   @Autowired
   ObjectMapper objectMapper;
 
-  public Mono<String> genAccessToken(Object subject) {
+  public String genAccessToken(Object subject) {
     try{
       Date Now = new Date();
       Date expireTime = new Date(Now.getTime() + 1000 * 60 * 60 * 24 * 14);
@@ -34,46 +35,54 @@ public class AuthServiceJwtImpl implements AuthService<Session> {
         .setSubject(objectMapper.writeValueAsString(subject))
         .signWith(SignatureAlgorithm.HS256, SALT)
         .compact();
-      return Mono.just(jwt);
+      return jwt;
     }catch (JsonProcessingException e){
       throw new TokenInvalidException(ErrorCode.INVALID_TOKEN);
     }
   }
 
-  public Mono<String> genRefreshToken(Object subject) {
-    Date Now = new Date();
-    Date expireTime = new Date(Now.getTime() + 1000 * 60 * 60 * 24 * 365);
-    String jwt = Jwts.builder()
-      .setExpiration(expireTime)
-      .setSubject(subject.toString())
-      .signWith(SignatureAlgorithm.HS256, SALT)
-      .compact();
-    return Mono.just(jwt);
+  public String genRefreshToken(Object subject) {
+    try{
+      Date Now = new Date();
+      Date expireTime = new Date(Now.getTime() + 1000 * 60 * 60 * 24 * 365);
+      String jwt = Jwts.builder()
+        .setExpiration(expireTime)
+        .setSubject(objectMapper.writeValueAsString(subject))
+        .signWith(SignatureAlgorithm.HS256, SALT)
+        .compact();
+      return jwt;
+    }catch (JsonProcessingException e){
+      throw new InvalidParameterException(ErrorCode.INVALID_REQUEST_PARAMETER);
+    }
   }
 
-  public Mono<Void> verifyToken(String token) {
+  public void verifyToken(String token) {
     try {
+      System.out.println("TOKEN");
+      System.out.println(token);
       Jwts.parser().setSigningKey(SALT).parseClaimsJws(token).getBody();
-      return Mono.just(null);
     } catch (ExpiredJwtException e) {
       throw new TokenExpiredException(ErrorCode.JWT_TOKEN_EXPIRED);
     } catch (JwtException e) {
+      System.out.println(e);
       throw new TokenInvalidException(ErrorCode.INVALID_TOKEN);
     }
   }
 
   // Token 해독 및 객체 생성
-  public Mono<Session> decode(String token) {
+  public Session decode(String token) {
     try {
       Claims Claim = Jwts.parser().setSigningKey(SALT).parseClaimsJws(token).getBody();
-      System.out.println(Claim.getSubject());
       Session session = objectMapper.readValue(Claim.getSubject(), Session.class);
-      return Mono.just(session);
+      return session;
     } catch (JsonProcessingException e) {
+      System.out.println(e);
       throw new TokenInvalidException(ErrorCode.INVALID_TOKEN);
     } catch (IOException e) {
+      System.out.println(e);
       throw new TokenInvalidException(ErrorCode.INVALID_TOKEN);
     } catch (MalformedJwtException e){
+      System.out.println(e);
       throw new TokenInvalidException(ErrorCode.INVALID_TOKEN);
     }
   }

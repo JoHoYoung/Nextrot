@@ -4,16 +4,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class GenToken {
+@AllArgsConstructor
+public class TokenRefresh {
 
-  @JsonProperty("UID")
+  @JsonProperty("refreshToken")
   @NotNull
-  private String UID;
+  private String refershToken;
 }

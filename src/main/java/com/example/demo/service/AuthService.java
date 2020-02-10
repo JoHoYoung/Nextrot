@@ -10,12 +10,12 @@ import java.util.Date;
 
 public interface AuthService<T> {
 
-  Mono<String> genAccessToken(Object subject);
+  String genAccessToken(Object subject);
 
-  Mono<String> genRefreshToken(Object subject);
+  String genRefreshToken(Object subject);
 
-  Mono<Void> verifyToken(String token);
+  void verifyToken(String token);
 
-  Mono<T> decode(String token);
+  T decode(String token);
 
 }

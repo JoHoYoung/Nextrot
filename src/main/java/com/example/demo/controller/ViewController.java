@@ -47,5 +47,4 @@ public class ViewController {
         return new ResponseEntity<>(response, HttpStatus.OK);
       });
   }
-
 }

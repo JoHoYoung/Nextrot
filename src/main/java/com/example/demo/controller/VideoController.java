@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class VideoController {
 
   //특정 노래의 비디오 리스트
   @GetMapping("")
-  public Mono<ResponseEntity<BaseResponse>> getVideoFromSong(@RequestParam("songId") String songId) {
+  public Mono<ResponseEntity<BaseResponse>> getVideoFromSong(@Valid @RequestParam("songId") String songId) {
     return videoService.findAllVideoBySongId(songId)
       .switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.INVALID_KEY)))
       .collectList()
@@ -47,7 +48,7 @@ public class VideoController {
 
   // 갱신이 생긴 모든 비디오 리스트
   @GetMapping("/updated")
-  public Mono<ResponseEntity<BaseResponse>> getVideoFromDate(@RequestParam("from") String date) {
+  public Mono<ResponseEntity<BaseResponse>> getVideoFromDate(@Valid @RequestParam("from") String date) {
     Date from = dateHelper.StingToDate(date);
     return singerService.findAllSingersFromDate(from).switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.EMPTY_DATA_SET)))
       .collectList().map(singers -> {
@@ -66,7 +67,7 @@ public class VideoController {
 
   // 특정 노래의 비디오 갱신 리스트
   @GetMapping("/updated/{songId}")
-  public Mono<ResponseEntity<BaseResponse>> getVideoByDateAndSong(@PathVariable("songId") String songId, @RequestParam("from") String date) {
+  public Mono<ResponseEntity<BaseResponse>> getVideoByDateAndSong(@PathVariable("songId") String songId, @Valid @RequestParam("from") String date) {
     Date from = dateHelper.StingToDate(date);
     return videoService.findAllVideoBySongIdAndFromDate(from, songId)
       .switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.EMPTY_DATA_SET)))

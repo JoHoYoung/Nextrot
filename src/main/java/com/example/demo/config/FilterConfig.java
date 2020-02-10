@@ -22,7 +22,7 @@ public class FilterConfig implements WebFilter {
   @Autowired
   AuthService authService;
 
-  String[] excludePatterns = new String[]{"/api/v1/auth/token"};
+  String[] excludePatterns = new String[]{"/api/v1/auth/token", "/api/v1/auth/token/refresh"};
 
   public Mono<Void> filter(ServerWebExchange serverWebExchange, WebFilterChain webFilterChain) {
     for (String excludePattern : this.excludePatterns) {
@@ -34,7 +34,9 @@ public class FilterConfig implements WebFilter {
       List<String> authHeaders = serverWebExchange.getRequest()
         .getHeaders().get("Authorization");
       String token = authHeaders.get(0).split(" ")[1];
-      Object decoded = authService.decode(token).block();
+      authService.verifyToken(token);
+
+      Object decoded = authService.decode(token);
       serverWebExchange.getAttributes().putIfAbsent("session", decoded);
       return webFilterChain.filter(serverWebExchange);
     } catch (NullPointerException e) {

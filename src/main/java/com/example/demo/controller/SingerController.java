@@ -16,6 +16,7 @@ import org.springframework.web.server.WebSession;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
 import javax.xml.ws.Response;
 import java.util.Date;
 
@@ -29,7 +30,7 @@ public class SingerController {
   DateHelper dateHelper;
 
   @GetMapping("/new")
-  public Mono<ResponseEntity<BaseResponse>> getNewSinger(@RequestParam("from") String date) {
+  public Mono<ResponseEntity<BaseResponse>> getNewSinger(@Valid @RequestParam("from") String date) {
     Date from = dateHelper.StingToDate(date);
     return singerService.findAllNewSinger(from).switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.EMPTY_DATA_SET)))
       .collectList().map(data -> {
@@ -59,8 +60,7 @@ public class SingerController {
   }
 
   @GetMapping("/updated")
-  public Mono<ResponseEntity<BaseResponse>> getUpdateSingerData(@RequestParam("from") String date) {
-
+  public Mono<ResponseEntity<BaseResponse>> getUpdateSingerData(@Valid @RequestParam("from") String date) {
     Date from = dateHelper.StingToDate(date);
     return singerService.findAllSingersFromDate(from).switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.EMPTY_DATA_SET)))
       .collectList()

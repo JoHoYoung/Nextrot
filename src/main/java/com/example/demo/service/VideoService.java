@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface VideoService {
+
   Flux<Video> findAllVideoFromDateAndSongs(Date from, List<Singer> singers, List<Song> songs);
 
   Flux<Video> findAllVideoBySongId(String songId);

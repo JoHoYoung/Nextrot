@@ -8,6 +8,8 @@ import com.example.demo.model.Like;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 
 @Service
@@ -32,7 +35,9 @@ public class SingerServiceImpl implements SingerService {
   ReactiveMongoTemplate reactiveMongoTemplate;
 
 
-  public Flux<Singer> findAllData() {
+  public Flux<Singer> findAllData(int page) {
+
+    Pageable pageable = new PageRequest(page, 10, );
     return singerRespository.findAll();
   }
 
@@ -79,7 +84,7 @@ public class SingerServiceImpl implements SingerService {
     List<AggregationOperation> aggregationOperations = new ArrayList<>();
 
     aggregationOperations.add(project().andExclude("songs"));
-
+    aggregationOperations.add(limit(10));
     Aggregation aggregation = Aggregation.
       newAggregation(aggregationOperations);
 
