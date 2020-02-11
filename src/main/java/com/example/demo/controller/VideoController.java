@@ -18,6 +18,7 @@ import reactor.core.publisher.Mono;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/videos")
@@ -36,19 +37,24 @@ public class VideoController {
 
   //특정 노래의 비디오 리스트
   @GetMapping("")
-  public Mono<ResponseEntity<BaseResponse>> getVideoFromSong(@Valid @RequestParam("songId") String songId) {
+  public Mono<ResponseEntity<BaseResponse>> getVideoFromSong(@Valid @RequestParam("songId") String songId,
+                                                             @RequestParam(required = false, value = "page", defaultValue = "0" )int page,
+                                                             @RequestParam(required = false, value = "pageSize", defaultValue = "10")int pageSize) {
     return videoService.findAllVideoBySongId(songId)
       .switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.INVALID_KEY)))
       .collectList()
       .map(data -> {
-        final BaseResponse response = new DataListResponse<>(200, "success", data);
+        final BaseResponse response = new DataListResponse<>(200, "success",
+          data.stream().skip(page*pageSize).limit(pageSize).collect(Collectors.toList()));
         return new ResponseEntity<>(response, HttpStatus.OK);
       });
   }
 
   // 갱신이 생긴 모든 비디오 리스트
   @GetMapping("/updated")
-  public Mono<ResponseEntity<BaseResponse>> getVideoFromDate(@Valid @RequestParam("from") String date) {
+  public Mono<ResponseEntity<BaseResponse>> getVideoFromDate(@Valid @RequestParam("from") String date,
+                                                             @RequestParam(required = false, value = "page", defaultValue = "0" )int page,
+                                                             @RequestParam(required = false, value = "pageSize", defaultValue = "10")int pageSize) {
     Date from = dateHelper.StingToDate(date);
     return singerService.findAllSingersFromDate(from).switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.EMPTY_DATA_SET)))
       .collectList().map(singers -> {
@@ -59,7 +65,8 @@ public class VideoController {
           .block();
 
         return videoService.findAllVideoFromDateAndSongs(from, singers, songs).collectList().map(data -> {
-          final BaseResponse response = new DataListResponse<>(200, "success", data);
+          final BaseResponse response = new DataListResponse<>(200, "success",
+            data.stream().skip(page*pageSize).limit(pageSize).collect(Collectors.toList()));
           return new ResponseEntity(response, HttpStatus.OK);
         }).block();
       });
@@ -67,13 +74,17 @@ public class VideoController {
 
   // 특정 노래의 비디오 갱신 리스트
   @GetMapping("/updated/{songId}")
-  public Mono<ResponseEntity<BaseResponse>> getVideoByDateAndSong(@PathVariable("songId") String songId, @Valid @RequestParam("from") String date) {
+  public Mono<ResponseEntity<BaseResponse>> getVideoByDateAndSong(@PathVariable("songId") String songId,
+                                                                  @Valid @RequestParam("from") String date,
+                                                                  @RequestParam(required = false, value = "page", defaultValue = "0" )int page,
+                                                                  @RequestParam(required = false, value = "pageSize", defaultValue = "10")int pageSize) {
     Date from = dateHelper.StingToDate(date);
     return videoService.findAllVideoBySongIdAndFromDate(from, songId)
       .switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.EMPTY_DATA_SET)))
       .collectList()
       .map(data -> {
-      final BaseResponse response = new DataListResponse<>(200, "success", data);
+      final BaseResponse response = new DataListResponse<>(200, "success",
+        data.stream().skip(page*pageSize).limit(pageSize).collect(Collectors.toList()));
       return new ResponseEntity(response, HttpStatus.OK);
     });
   }

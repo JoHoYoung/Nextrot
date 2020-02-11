@@ -8,6 +8,7 @@ import com.example.demo.model.Like;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
@@ -29,15 +30,13 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.proj
 
 @Service
 public class SingerServiceImpl implements SingerService {
+
   @Autowired
   SingerRespository singerRespository;
   @Autowired
   ReactiveMongoTemplate reactiveMongoTemplate;
 
-
-  public Flux<Singer> findAllData(int page) {
-
-    Pageable pageable = new PageRequest(page, 10, );
+  public Flux<Singer> findAllData() {
     return singerRespository.findAll();
   }
 

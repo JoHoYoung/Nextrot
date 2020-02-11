@@ -58,8 +58,6 @@ public class AuthServiceJwtImpl implements AuthService<Session> {
 
   public void verifyToken(String token) {
     try {
-      System.out.println("TOKEN");
-      System.out.println(token);
       Jwts.parser().setSigningKey(SALT).parseClaimsJws(token).getBody();
     } catch (ExpiredJwtException e) {
       throw new TokenExpiredException(ErrorCode.JWT_TOKEN_EXPIRED);

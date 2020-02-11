@@ -1,0 +1,34 @@
+<configuration>
+    <springProfile name="dev">
+        <property resource="logback-dev.properties"/>
+    </springProfile>
+    <springProfile name="prod">
+        <property resource="logback-prod.properties"/>
+    </springProfile>
+    <property name="LOG_DIR" value="${log.file.path}"/>
+    <property name="LOG_PATH" value="${LOG_DIR}/nextrot.log"/>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-5level| %d{yyyy-MM-DD HH:mm:ss} |[%thread %F:%L] %method | %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}</file>
+        <encoder>
+            <pattern>%-5level| %d{yyyy-MM-DD HH:mm:ss} |[%thread %F:%L] %method | %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/pliary_%d{yyyyMMdd}_%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <logger name="com.example.myapp" level="INFO">
+        <appender-ref ref="ROLLING_FILE"/>
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+</configuration>

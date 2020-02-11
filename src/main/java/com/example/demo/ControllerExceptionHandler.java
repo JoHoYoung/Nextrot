@@ -32,6 +32,7 @@ public class ControllerExceptionHandler {
 
   @ExceptionHandler(TokenInvalidException.class)
   public ResponseEntity<ErrorResponse> TokenInvalidExceptionHandler(TokenInvalidException e){
+    System.out.println(e);
     return new ResponseEntity<>(new ErrorResponse(e), HttpStatus.FORBIDDEN);
   }
 
@@ -49,5 +50,4 @@ public class ControllerExceptionHandler {
   protected ResponseEntity<ErrorResponse> WebExchangeBindExceptionHanldeR(WebExchangeBindException e){
     throw new InvalidParameterException(ErrorCode.INVALID_REQUEST_PARAMETER);
   }
-
 }

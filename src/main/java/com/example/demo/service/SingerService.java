@@ -5,6 +5,8 @@ import com.example.demo.model.Song;
 import com.example.demo.model.Video;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import reactor.core.publisher.Flux;
@@ -19,9 +21,9 @@ public interface SingerService {
 
   Mono<Singer> findOneById(String id);
 
-  Flux<Singer> findAllData(int page);
+  Flux<Singer> findAllData();
 
-  Flux<Singer> findAllSingers((int page);
+  Flux<Singer> findAllSingers();
 
   Flux<Singer> findSingersByName(String name);
 

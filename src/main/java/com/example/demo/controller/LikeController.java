@@ -35,7 +35,6 @@ public class LikeController {
   @RequestMapping("/singer/{singerId}")
   public Mono<ResponseEntity<BaseResponse>> likeToSinger(@RequestAttribute("session") Session session,
                                                          @Valid @PathVariable("singerId") String singerId) {
-
     return likeService.findByTypeAndUidAndTargetId("singer", session.getUID(), singerId).map(el -> {
       throw new UnAuthorizedAccessException(ErrorCode.DUPLICATED_LIKE);
     })

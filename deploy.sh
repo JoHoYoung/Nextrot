@@ -1,7 +1,7 @@
 # mvn package spring-boot:repackage -Dmaven.test.skip=true
 # java -jar ./target/myapp-0.0.1.jar
 
-/Users/HY/Downloads/apache-maven-3.6.3/bin/mvn package spring-boot:repackage -Dmaven.test.skip=true
+/Users/HY/Downloads/apache-maven-3.6.3/bin/mvn package spring-boot:repackage -Dmaven.test.skip=true -Dspring.profiles.active=prod
 
 docker rm -f nextrot
 docker image rm nextrot
