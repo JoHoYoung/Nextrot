@@ -10,6 +10,9 @@ import java.util.Date;
 import java.util.List;
 
 public interface SongService {
+
+  Flux<Song> findAllSongsSortBy(String field, int limit);
+
   Flux<Song> findAllSongsFromDateAndSingers(Date from, List<Singer> singers);
 
   Flux<Song> findAllSongsFromDateAndSinger(Date from, Singer singers);

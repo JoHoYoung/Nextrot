@@ -6,8 +6,8 @@
 docker rm -f nextrot
 docker image rm nextrot
 docker build -t nextrot .
-docker tag nextrot 34.64.150.65:5000/nextrot:0.7
-docker push 34.64.150.65:5000/nextrot:0.7
+docker tag nextrot 34.64.150.65:5000/nextrot:0.8
+docker push 34.64.150.65:5000/nextrot:0.8
 
 # docker run -p 8080:8080 -d --name groot groot:0.1
 

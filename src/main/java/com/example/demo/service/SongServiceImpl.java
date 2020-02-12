@@ -4,6 +4,7 @@ import com.example.demo.model.Singer;
 import com.example.demo.model.Song;
 import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
@@ -25,6 +26,27 @@ public class SongServiceImpl implements SongService{
 
   @Autowired
   ReactiveMongoTemplate reactiveMongoTemplate;
+
+  public Flux<Song> findAllSongsSortBy(String field, int limit){
+    List<AggregationOperation> aggregationOperations = new ArrayList<>();
+
+    aggregationOperations.add(Aggregation.unwind("songs"));
+    aggregationOperations.add(Aggregation.sort(Sort.Direction.DESC, field));
+    aggregationOperations.add(Aggregation.project().andExclude("songs.songs.video"));
+    aggregationOperations.add(Aggregation.limit(limit));
+    aggregationOperations.add(Aggregation.project()
+      .andExpression("songs._id").as("_id")
+      .andExpression("_id").as("singerId")
+      .andExpression("songs.name").as("name")
+      .andExpression("songs.lyrics").as("lyrics")
+      .andExpression("songs.like").as("like")
+      .andExpression("songs.view").as("view")
+      .andExpression("songs.createdAt").as("createdAt")
+      .andExpression("songs.updatedAt").as("updatedAt"));
+    Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
+    return reactiveMongoTemplate.aggregate(aggregation, "singer", Song.class);
+
+  }
 
   public Flux<Song> findAllSongsFromSinger(Singer singer) {
     ArrayList<Criteria> orOperations = new ArrayList<>();
