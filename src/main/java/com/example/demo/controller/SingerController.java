@@ -36,8 +36,7 @@ public class SingerController {
   @GetMapping("/new")
   public Mono<ResponseEntity<BaseResponse>> getNewSinger(@Valid @RequestParam("from") String date,
                                                          @RequestParam(required = false, value = "page", defaultValue = "0" )int page,
-                                                         @RequestParam(required = false, value = "pageSize", defaultValue = "10")int pageSize
-  ) {
+                                                         @RequestParam(required = false, value = "pageSize", defaultValue = "10")int pageSize) {
     Date from = dateHelper.StingToDate(date);
     return singerService.findAllNewSinger(from).switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.EMPTY_DATA_SET)))
       .collectList().map(data -> {
