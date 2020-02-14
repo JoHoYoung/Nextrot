@@ -36,5 +36,4 @@ public abstract class BusinessException extends RuntimeException {
     this.stringBuilder.append(this.getStatusMsg());
     return this.stringBuilder.toString();
   }
-
 }

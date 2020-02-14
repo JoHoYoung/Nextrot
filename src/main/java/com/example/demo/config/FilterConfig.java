@@ -4,6 +4,8 @@ import com.example.demo.ErrorCode;
 import com.example.demo.exception.TokenInvalidException;
 import com.example.demo.service.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -22,9 +24,14 @@ public class FilterConfig implements WebFilter {
   @Autowired
   AuthService authService;
 
+  static private Log logger = LogFactory.getLog("com.example.demo.config");
+
   String[] excludePatterns = new String[]{"/api/v1/auth/token", "/api/v1/auth/token/refresh"};
 
   public Mono<Void> filter(ServerWebExchange serverWebExchange, WebFilterChain webFilterChain) {
+
+    logger.info(serverWebExchange.getRequest().getPath());
+
     for (String excludePattern : this.excludePatterns) {
       if (serverWebExchange.getRequest().getPath().toString().matches(excludePattern)) {
         return webFilterChain.filter(serverWebExchange);
@@ -35,7 +42,6 @@ public class FilterConfig implements WebFilter {
         .getHeaders().get("Authorization");
       String token = authHeaders.get(0).split(" ")[1];
       authService.verifyToken(token);
-
       Object decoded = authService.decode(token);
       serverWebExchange.getAttributes().putIfAbsent("session", decoded);
       return webFilterChain.filter(serverWebExchange);

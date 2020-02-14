@@ -31,8 +31,8 @@ public class SongServiceImpl implements SongService{
     List<AggregationOperation> aggregationOperations = new ArrayList<>();
 
     aggregationOperations.add(Aggregation.unwind("songs"));
-    aggregationOperations.add(Aggregation.sort(Sort.Direction.DESC, field));
     aggregationOperations.add(Aggregation.project().andExclude("songs.songs.video"));
+    aggregationOperations.add(Aggregation.sort(Sort.Direction.DESC, "songs."+field));
     aggregationOperations.add(Aggregation.limit(limit));
     aggregationOperations.add(Aggregation.project()
       .andExpression("songs._id").as("_id")
