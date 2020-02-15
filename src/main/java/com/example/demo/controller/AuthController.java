@@ -23,6 +23,7 @@ public class AuthController {
 
   @PostMapping("/token")
   public Mono<ResponseEntity<BaseResponse>> genToken(@Valid @RequestBody GenToken genToken) {
+
     final BaseResponse response = new AuthJwtResponse(200, "success",
       authService.genAccessToken(new Session(genToken.getUID())),
       authService.genRefreshToken(genToken));
