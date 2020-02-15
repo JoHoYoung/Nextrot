@@ -31,7 +31,6 @@ public class SongServiceImpl implements SongService{
     List<AggregationOperation> aggregationOperations = new ArrayList<>();
 
     aggregationOperations.add(Aggregation.unwind("songs"));
-    aggregationOperations.add(Aggregation.project().andExclude("songs.songs.video"));
     aggregationOperations.add(Aggregation.sort(Sort.Direction.DESC, "songs."+field));
     aggregationOperations.add(Aggregation.limit(limit));
     aggregationOperations.add(Aggregation.project()
@@ -41,6 +40,7 @@ public class SongServiceImpl implements SongService{
       .andExpression("songs.lyrics").as("lyrics")
       .andExpression("songs.like").as("like")
       .andExpression("songs.view").as("view")
+      .andExpression("songs.video").as("video")
       .andExpression("songs.createdAt").as("createdAt")
       .andExpression("songs.updatedAt").as("updatedAt"));
     Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
@@ -58,7 +58,6 @@ public class SongServiceImpl implements SongService{
 
     aggregationOperations.add(Aggregation.match(orCriteria));
     aggregationOperations.add(Aggregation.unwind("songs"));
-    aggregationOperations.add(Aggregation.project().andExclude("songs.songs.video"));
     aggregationOperations.add(Aggregation.project()
       .andExpression("songs._id").as("_id")
       .andExpression("_id").as("singerId")
@@ -66,6 +65,7 @@ public class SongServiceImpl implements SongService{
       .andExpression("songs.lyrics").as("lyrics")
       .andExpression("songs.like").as("like")
       .andExpression("songs.view").as("view")
+      .andExpression("songs.video").as("video")
       .andExpression("songs.createdAt").as("createdAt")
       .andExpression("songs.updatedAt").as("updatedAt"));
     Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
@@ -86,7 +86,6 @@ public class SongServiceImpl implements SongService{
     List<AggregationOperation> aggregationOperations = new ArrayList<>();
     aggregationOperations.add(Aggregation.match(orCriteria));
     aggregationOperations.add(Aggregation.unwind("songs"));
-    aggregationOperations.add(Aggregation.project().andExclude("songs.songs.video"));
 
     aggregationOperations.add(Aggregation.project()
       .andExpression("songs._id").as("_id")
@@ -95,6 +94,7 @@ public class SongServiceImpl implements SongService{
       .andExpression("songs.lyrics").as("lyrics")
       .andExpression("songs.like").as("like")
       .andExpression("songs.view").as("view")
+      .andExpression("songs.video").as("video")
       .andExpression("songs.createdAt").as("createdAt")
       .andExpression("songs.updatedAt").as("updatedAt")); Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
     return reactiveMongoTemplate.aggregate(aggregation, "singer", Song.class);

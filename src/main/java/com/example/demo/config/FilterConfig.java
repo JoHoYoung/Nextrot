@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
@@ -19,9 +18,6 @@ import java.util.List;
 @Component
 public class FilterConfig implements WebFilter {
 
-
-  // DI // IOC
-  // Dependenct Injection // Inversion Of Control
   @Autowired
   ObjectMapper objectMapper;
 
@@ -29,11 +25,10 @@ public class FilterConfig implements WebFilter {
   AuthService authService;
 
   static private Log logger = LogFactory.getLog("com.example.demo.config");
-
   String[] excludePatterns = new String[]{"/api/v1/auth/token", "/api/v1/auth/token/refresh"};
 
   public Mono<Void> filter(ServerWebExchange serverWebExchange, WebFilterChain webFilterChain) {
-    logger.info(serverWebExchange.getRequest().getPath() + " " +serverWebExchange.getRequest().getRemoteAddress().getAddress().getHostAddress());
+    logger.info(serverWebExchange.getRequest().getPath() + " " +serverWebExchange.getRequest().getHeaders().get("X-Real-IP"));
     for (String excludePattern : this.excludePatterns) {
       if (serverWebExchange.getRequest().getPath().toString().matches(excludePattern)) {
         return webFilterChain.filter(serverWebExchange);

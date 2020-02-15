@@ -31,8 +31,6 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.proj
 @Service
 public class SingerServiceImpl implements SingerService {
 
-  // 한국 : 20시
-  // UTC : 11시
   @Autowired
   SingerRespository singerRespository;
   @Autowired
@@ -57,8 +55,9 @@ public class SingerServiceImpl implements SingerService {
   public Flux<Singer> findAllNewSinger(Date from) {
     List<AggregationOperation> aggregationOperations = new ArrayList<>();
 
-    aggregationOperations.add(Aggregation.match(Criteria.where("createdAt").gt(from)));
     aggregationOperations.add(project().andExclude("songs"));
+    aggregationOperations.add(Aggregation.match(Criteria.where("createdAt").gt(from)));
+
 
     Aggregation aggregation = Aggregation.
       newAggregation(aggregationOperations);
