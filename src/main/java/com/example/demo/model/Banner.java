@@ -1,12 +1,15 @@
 package com.example.demo.model;
 
 
+import com.example.demo.ErrorCode;
+import com.example.demo.exception.InvalidParameterException;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 import java.util.List;
@@ -15,7 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Document(collection = "banner")
 public class Banner {
 
   @Id
@@ -28,4 +30,5 @@ public class Banner {
 
   private Date createdAt;
   private Date updatedAt;
+
 }

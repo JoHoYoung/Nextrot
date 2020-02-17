@@ -20,6 +20,7 @@ public class Song {
   @Id
   private String id;
   private String singerId;
+  private String singerName;
   private String name;
   private String lyrics;
   private int like;

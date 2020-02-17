@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.ErrorCode;
+import com.example.demo.exception.EmptyDataException;
 import com.example.demo.exception.InvalidParameterException;
 import com.example.demo.response.BaseResponse;
 import com.example.demo.response.DataListResponse;
@@ -76,7 +77,8 @@ public class SongController {
                                                                   @RequestParam(required = false, value = "pageSize", defaultValue = "10") int pageSize) {
     Date from = dateHelper.StingToDate(date);
     return singerService.findOneById(id).map(singer ->
-       songService.findAllSongsFromDateAndSinger(from, singer).collectList().map(data -> {
+       songService.findAllSongsFromDateAndSinger(from, singer).switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.EMPTY_DATA_SET)))
+         .collectList().map(data -> {
         final BaseResponse response = new DataListResponse<>(200, "success",
           data.stream().skip(page * pageSize).limit(pageSize).collect(Collectors.toList()));
         return new ResponseEntity(response, HttpStatus.OK);
