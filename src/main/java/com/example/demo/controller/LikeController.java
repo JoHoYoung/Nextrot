@@ -72,6 +72,7 @@ public class LikeController {
                                                         @PathVariable("videoId") String videoId) {
 
     return likeService.findByTypeAndUidAndTargetId("video", session.getUID(), videoId).map(el -> {
+      System.out.println(el);
       throw new UnAuthorizedAccessException(ErrorCode.DUPLICATED_LIKE);
     })
       .switchIfEmpty(videoService.likeVideoById(singerId, songId, videoId).map(el -> {

@@ -1,11 +1,7 @@
 package com.example.demo.model;
 
 
-import com.example.demo.ErrorCode;
-import com.example.demo.exception.InvalidParameterException;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,9 +20,9 @@ public class Banner {
   private String id;
   private String imageUrl;
   private String state;
-
+  private String title;
   private int actionType;
-  private List<Video> data;
+  private List<Song> data;
 
   private Date createdAt;
   private Date updatedAt;
