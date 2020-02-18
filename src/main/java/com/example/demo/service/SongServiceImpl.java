@@ -188,4 +188,24 @@ public class SongServiceImpl implements SongService{
     .andOperator(Criteria.where("songs._id").is(songId))), update, "singer");
   }
 
+  public Flux<Singer> getnullData(){
+
+    ArrayList<Criteria> orOperations = new ArrayList<>();
+    orOperations.add(Criteria.where("songs.video.key").is(""));
+    orOperations.add(Criteria.where("songs.lyrics")).is("");
+    Criteria orCriteria = new Criteria();
+    orCriteria.orOperator(orOperations.toArray(new Criteria[0]));
+
+    List<AggregationOperation> aggregationOperations = new ArrayList<>();
+    aggregationOperations.add(Aggregation.unwind("songs"));
+    aggregationOperations.add(Aggregation.match(Criteria.where("songs._id").is(songId)));
+    aggregationOperations.add(Aggregation.unwind("songs.video"));
+  }
+  public Mono<UpdateResult> updateField(String singerId, String lyrics, String key){
+    Update update = new Update();
+    update.set("songs.lyrics",lyrics);
+    update.set("songs.$.video.key",key);
+    return reactiveMongoTemplate.updateFirst(Query.query(Criteria.where("_id").is(singerId)), update, "singer");
+  }
+
 }

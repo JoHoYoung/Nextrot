@@ -38,4 +38,5 @@ public class BannerController {
       return new ResponseEntity<>(response, HttpStatus.OK);
     });
   }
+
 }

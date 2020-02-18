@@ -1,6 +1,10 @@
 *.test
 HELP.md
 
+js/node_modules/
+package-lock.json
+geckodriver
+
 target/
 !.mvn/wrapper/maven-wrapper.jar
 

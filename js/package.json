@@ -1,0 +1,18 @@
+{
+  "name": "nextrot",
+  "version": "1.0.0",
+  "author": "JoHoYoung <whghdud17@gmail.com> (https://github.com/JoHoYoung)",
+  "description": "nextrot song crawling script",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "fetch": "^1.1.0",
+    "fs": "0.0.1-security",
+    "selenium-webdriver": "^4.0.0-alpha.5",
+    "uuid": "^3.3.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
