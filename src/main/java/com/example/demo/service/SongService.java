@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.Singer;
 import com.example.demo.model.Song;
+import com.example.demo.model.SongAdmin;
 import com.mongodb.client.result.UpdateResult;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -24,4 +25,9 @@ public interface SongService {
   Mono<UpdateResult> likeToSongById(String singerId, String songId);
 
   Mono<UpdateResult> viewSongById(String singerId, String songId);
+
+
+  Flux<SongAdmin> getnullData();
+
+  Mono<UpdateResult> updateField(String singerId, String lyrics, String key);
 }

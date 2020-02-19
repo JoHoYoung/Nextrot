@@ -6,5 +6,5 @@
 docker rm -f nextrot
 docker image rm nextrot
 docker build -t nextrot .
-docker tag nextrot 34.64.150.65:5000/nextrot:1.4
-docker push 34.64.150.65:5000/nextrot:1.4
+docker tag nextrot 34.64.150.65:5000/nextrot:1.5
+docker push 34.64.150.65:5000/nextrot:1.5

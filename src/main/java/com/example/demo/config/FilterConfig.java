@@ -25,7 +25,8 @@ public class FilterConfig implements WebFilter {
   AuthService authService;
 
   static private Log logger = LogFactory.getLog("com.example.demo.config");
-  String[] excludePatterns = new String[]{"/api/v1/auth/token", "/api/v1/auth/token/refresh"};
+  String[] excludePatterns = new String[]{"/api/v1/auth/token",
+    "/api/v1/auth/token/refresh", "/api/v1/admin/data", "/api/v1/admin/update"};
 
   public Mono<Void> filter(ServerWebExchange serverWebExchange, WebFilterChain webFilterChain) {
     logger.info(serverWebExchange.getRequest().getPath() + " " +serverWebExchange.getRequest().getHeaders().get("X-Real-IP"));

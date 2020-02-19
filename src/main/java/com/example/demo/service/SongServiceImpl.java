@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.Singer;
 import com.example.demo.model.Song;
+import com.example.demo.model.SongAdmin;
 import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -188,24 +189,34 @@ public class SongServiceImpl implements SongService{
     .andOperator(Criteria.where("songs._id").is(songId))), update, "singer");
   }
 
-  public Flux<Singer> getnullData(){
+  public Flux<SongAdmin> getnullData(){
 
     ArrayList<Criteria> orOperations = new ArrayList<>();
     orOperations.add(Criteria.where("songs.video.key").is(""));
-    orOperations.add(Criteria.where("songs.lyrics")).is("");
+    orOperations.add(Criteria.where("songs.lyrics").is(""));
     Criteria orCriteria = new Criteria();
     orCriteria.orOperator(orOperations.toArray(new Criteria[0]));
 
     List<AggregationOperation> aggregationOperations = new ArrayList<>();
     aggregationOperations.add(Aggregation.unwind("songs"));
-    aggregationOperations.add(Aggregation.match(Criteria.where("songs._id").is(songId)));
     aggregationOperations.add(Aggregation.unwind("songs.video"));
+    aggregationOperations.add(Aggregation.match(orCriteria));
+    aggregationOperations.add(Aggregation.project()
+      .andExpression("songs._id").as("songId")
+      .andExpression("songs.lyrics").as("lyrics")
+      .andExpression("songs.name").as("songName")
+      .andExpression("name").as("singerName")
+      .andExpression("songs.video.key").as("key"));
+    Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
+    return reactiveMongoTemplate.aggregate(aggregation, "singer", SongAdmin.class);
   }
-  public Mono<UpdateResult> updateField(String singerId, String lyrics, String key){
+
+  public Mono<UpdateResult> updateField(String songId, String lyrics, String key){
     Update update = new Update();
-    update.set("songs.lyrics",lyrics);
-    update.set("songs.$.video.key",key);
-    return reactiveMongoTemplate.updateFirst(Query.query(Criteria.where("_id").is(singerId)), update, "singer");
+    update.set("songs.$.lyrics",lyrics);
+    update.set("songs.$.video.0.key",key);
+    //return null;
+    return reactiveMongoTemplate.updateFirst(Query.query(Criteria.where("songs._id").is(songId)), update, "singer");
   }
 
 }

@@ -189,13 +189,7 @@ const VIDEO = (key) => {
 };
 
 async function solution() {
-  // let singers = await getSignerList;
-  // console.log(singers);
-  // let a = await getSongList("송가인");
-  // console.log(a);
-  // let id = uuid.v4;
-//  let singers = await getSingerList();
-  let singers = ['송가인'];
+  let singers = await getSingerList();
   for (let i = 0; i < singers.length; i++) {
     let Singer = SINGER(singers[i]);
     let songs = await getSongList(singers[i]);
