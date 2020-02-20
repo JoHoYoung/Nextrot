@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.demo.exception.*;
 import com.example.demo.response.ErrorResponse;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -39,7 +40,7 @@ public class ControllerExceptionHandler {
 
   @ExceptionHandler(InvalidParameterException.class)
   protected ResponseEntity<ErrorResponse> InvalidParameterExceptionHandler(InvalidParameterException e){
-      return new ResponseEntity<>(new ErrorResponse(e), HttpStatus.UNAUTHORIZED);
+      return new ResponseEntity<>(new ErrorResponse(e), HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(WebExchangeBindException.class)
@@ -47,4 +48,8 @@ public class ControllerExceptionHandler {
     throw new InvalidParameterException(ErrorCode.INVALID_REQUEST_PARAMETER);
   }
 
+  @ExceptionHandler(InternalServerException.class)
+  protected ResponseEntity<ErrorResponse> InternalServerExceptionHandler(InternalServerException e){
+    return new ResponseEntity<>(new ErrorResponse(e), HttpStatus.BAD_REQUEST);
+  }
 }

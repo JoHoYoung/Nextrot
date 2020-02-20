@@ -15,6 +15,7 @@ public enum ErrorCode {
   DUPLICATED_LIKE(741, "D001", "Duplicate Like cannot be done"),
 
   INVALID_REQUEST_PARAMETER(751, "E001", "Invalid Request Paramerter Format"),
+  INVALID_BANNER_ACTION(752, "E002", "Invalid Banner Action Request"),
   DECODED_TOKEN_PARSE_ERROR(431,"A004","Error at Parse decoded Token"),
 
   INTERNAL_SERVER_ERROR(500, "S001", "Internal Server Error");

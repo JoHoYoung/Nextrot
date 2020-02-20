@@ -18,7 +18,6 @@ public class WebExceptionHandler implements ErrorWebExceptionHandler {
 
   @Override
   public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
-
     try{
       return dataBufferWriter.write(exchange.getResponse(), (BusinessException)ex);
     }
