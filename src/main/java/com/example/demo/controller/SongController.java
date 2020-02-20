@@ -34,19 +34,18 @@ public class SongController {
   public Mono<ResponseEntity<BaseResponse>> getSongsBySingerId(@Valid @RequestParam("singerId") String singerId,
                                                                @RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                                @RequestParam(required = false, value = "pageSize", defaultValue = "10") int pageSize) {
-    return singerService.findOneById(singerId).map(singer ->
-      songService.findAllSongsFromSinger(singer).collectList().map(data -> {
-        final BaseResponse response = new DataListResponse<>(200, "success",
-          data.stream().skip(page * pageSize).limit(pageSize).collect(Collectors.toList()));
-        return new ResponseEntity<>(response, HttpStatus.OK);
-      }).block());
+    return songService.findAllSongsFromSingerId(singerId).collectList().map(data -> {
+      final BaseResponse response = new DataListResponse<>(200, "success",
+        data.stream().skip(page * pageSize).limit(pageSize).collect(Collectors.toList()));
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    });
   }
 
   @GetMapping("/favorite")
-  public Mono<ResponseEntity<BaseResponse>> getSongsSortBy(@RequestParam("field")String field,
-                                                            @RequestParam("limit")int limit){
+  public Mono<ResponseEntity<BaseResponse>> getSongsSortBy(@RequestParam("field") String field,
+                                                           @RequestParam("limit") int limit) {
 
-    if(!field.equals("like") && !field.equals("view")){
+    if (!field.equals("like") && !field.equals("view")) {
       throw new InvalidParameterException(ErrorCode.INVALID_REQUEST_PARAMETER);
     }
     return songService.findAllSongsSortBy(field, limit).collectList().map(data -> {
@@ -62,7 +61,7 @@ public class SongController {
                                                                 @RequestParam(required = false, value = "pageSize", defaultValue = "10") int pageSize) {
     Date from = dateHelper.StingToDate(date);
     return singerService.findAllSingersFromDate(from).collectList().map(singers ->
-       songService.findAllSongsFromDateAndSingers(from, singers).collectList().map(data -> {
+      songService.findAllSongsFromDateAndSingers(from, singers).collectList().map(data -> {
         final BaseResponse response = new DataListResponse<>(200, "success",
           data.stream().skip(page * pageSize).limit(pageSize).collect(Collectors.toList()));
         return new ResponseEntity(response, HttpStatus.OK);
@@ -72,18 +71,17 @@ public class SongController {
 
   // 데이터의 변경이 생긴 특정 가수의 노래 목록
   @GetMapping("/updated/{singerId}")
-  public Mono<ResponseEntity<BaseResponse>> getSongsUpdatedSinger(@PathVariable("singerId") String id, @Valid @RequestParam("from") String date,
+  public Mono<ResponseEntity<BaseResponse>> getSongsUpdatedSinger(@PathVariable("singerId") String singerId, @Valid @RequestParam("from") String date,
                                                                   @RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                                   @RequestParam(required = false, value = "pageSize", defaultValue = "10") int pageSize) {
     Date from = dateHelper.StingToDate(date);
-    return singerService.findOneById(id).map(singer ->
-       songService.findAllSongsFromDateAndSinger(from, singer).switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.EMPTY_DATA_SET)))
-         .collectList().map(data -> {
+
+    return songService.findAllSongsFromDateAndSingerId(from, singerId).switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.EMPTY_DATA_SET)))
+      .collectList().map(data -> {
         final BaseResponse response = new DataListResponse<>(200, "success",
           data.stream().skip(page * pageSize).limit(pageSize).collect(Collectors.toList()));
         return new ResponseEntity(response, HttpStatus.OK);
-      }).block()
-    );
+      });
   }
 
 }

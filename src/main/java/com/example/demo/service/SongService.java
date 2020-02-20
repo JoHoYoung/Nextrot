@@ -18,9 +18,13 @@ public interface SongService {
 
   Flux<Song> findAllSongsFromDateAndSinger(Date from, Singer singers);
 
+  Flux<Song> findAllSongsFromDateAndSingerId(Date from, String singerId);
+
   Flux<Song> findAllSongsFromSingers(List<Singer> singers);
 
   Flux<Song> findAllSongsFromSinger(Singer singers);
+
+  Flux<Song> findAllSongsFromSingerId(String singerId);
 
   Mono<UpdateResult> likeToSongById(String singerId, String songId);
 
