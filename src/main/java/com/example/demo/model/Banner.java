@@ -21,6 +21,7 @@ public class Banner {
   private String imageUrl;
   private String state;
   private String title;
+  private String key;
   private int actionType;
   private List<Song> data;
 
