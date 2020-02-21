@@ -75,7 +75,6 @@ public class SongController {
                                                                   @RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                                   @RequestParam(required = false, value = "pageSize", defaultValue = "10") int pageSize) {
     Date from = dateHelper.StingToDate(date);
-
     return songService.findAllSongsFromDateAndSingerId(from, singerId).switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.EMPTY_DATA_SET)))
       .collectList().map(data -> {
         final BaseResponse response = new DataListResponse<>(200, "success",

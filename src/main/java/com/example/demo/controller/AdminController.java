@@ -32,4 +32,5 @@ public class AdminController {
      new ResponseEntity<>(new BaseResponse(200, "success"), HttpStatus.OK)
     );
   }
+
 }

@@ -10,6 +10,7 @@ import java.util.Date;
 
 public interface AuthService<T> {
 
+
   String genAccessToken(Object subject);
 
   String genRefreshToken(Object subject);

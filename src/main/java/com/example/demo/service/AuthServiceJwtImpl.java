@@ -62,7 +62,6 @@ public class AuthServiceJwtImpl implements AuthService<Session> {
     } catch (ExpiredJwtException e) {
       throw new TokenExpiredException(ErrorCode.JWT_TOKEN_EXPIRED);
     } catch (JwtException e) {
-      System.out.println(e);
       throw new TokenInvalidException(ErrorCode.INVALID_TOKEN);
     }
   }
@@ -74,13 +73,10 @@ public class AuthServiceJwtImpl implements AuthService<Session> {
       Session session = objectMapper.readValue(Claim.getSubject(), Session.class);
       return session;
     } catch (JsonProcessingException e) {
-      System.out.println(e);
       throw new TokenInvalidException(ErrorCode.INVALID_TOKEN);
     } catch (IOException e) {
-      System.out.println(e);
       throw new TokenInvalidException(ErrorCode.INVALID_TOKEN);
     } catch (MalformedJwtException e){
-      System.out.println(e);
       throw new TokenInvalidException(ErrorCode.INVALID_TOKEN);
     }
   }

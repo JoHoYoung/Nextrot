@@ -85,7 +85,6 @@ public class SingerServiceImpl implements SingerService {
     List<AggregationOperation> aggregationOperations = new ArrayList<>();
 
     aggregationOperations.add(project().andExclude("songs"));
-    aggregationOperations.add(limit(10));
     Aggregation aggregation = Aggregation.
       newAggregation(aggregationOperations);
 

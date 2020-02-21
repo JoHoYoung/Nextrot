@@ -80,9 +80,7 @@ public class SingerController {
 
   @GetMapping("/{singerId}")
   public Mono<ResponseEntity<BaseResponse>> getSingerById(@PathVariable("singerId") String singerId) {
-
     return singerService.findOneById(singerId).switchIfEmpty(Mono.error(new EmptyDataException(ErrorCode.INVALID_KEY))).map(data -> {
-
       final BaseResponse response = new DataResponse<>(200, "success", data);
       return new ResponseEntity<>(response, HttpStatus.OK);
     });

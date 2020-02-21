@@ -29,7 +29,6 @@ public class ControllerExceptionHandler {
 
   @ExceptionHandler(TokenInvalidException.class)
   public ResponseEntity<ErrorResponse> TokenInvalidExceptionHandler(TokenInvalidException e){
-    System.out.println(e);
     return new ResponseEntity<>(new ErrorResponse(e), HttpStatus.FORBIDDEN);
   }
 

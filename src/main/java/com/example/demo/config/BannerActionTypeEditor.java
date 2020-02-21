@@ -9,9 +9,8 @@ public class BannerActionTypeEditor extends PropertyEditorSupport {
   public void setAsText(String text) {
     try {
       setValue(BannerAction.fromValue(text));
-    } catch (Exception ex) {
+    } catch (Exception e) {
       setValue(null);
     }
   }
 }
-
