@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.buffer.DataBufferFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -20,8 +21,10 @@ public class DataBufferWriter {
       .writeWith(Mono.fromSupplier(() -> {
         DataBufferFactory bufferFactory = httpResponse.bufferFactory();
         try {
+          httpResponse.setStatusCode(HttpStatus.FORBIDDEN);
           return bufferFactory.wrap(objectMapper.writeValueAsBytes(new ErrorResponse(object)));
         } catch (Exception ex) {
+          httpResponse.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
           return bufferFactory.wrap(new byte[0]);
         }
       }));

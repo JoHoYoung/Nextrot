@@ -32,7 +32,7 @@ public class LikeController {
   VideoService videoService;
 
 
-  @RequestMapping("/singer/{singerId}")
+  @GetMapping("/singer/{singerId}")
   public Mono<ResponseEntity<BaseResponse>> likeToSinger(@RequestAttribute("session") Session session,
                                                          @Valid @PathVariable("singerId") String singerId) {
     return likeService.findByTypeAndUidAndTargetId("singer", session.getUID(), singerId).map(el -> {
@@ -48,7 +48,7 @@ public class LikeController {
       .then(Mono.just(new ResponseEntity<>(new BaseResponse(200, "success"), HttpStatus.OK)));
   }
 
-  @RequestMapping("/singer/{singerId}/song/{songId}")
+  @GetMapping("/singer/{singerId}/song/{songId}")
   public Mono<ResponseEntity<BaseResponse>> likeToSong(@RequestAttribute("session") Session session,
                                                        @PathVariable("singerId") String singerId,
                                                        @PathVariable("songId") String songId) {
@@ -65,14 +65,13 @@ public class LikeController {
       .then(Mono.just(new ResponseEntity<>(new BaseResponse(200, "success"), HttpStatus.OK)));
   }
 
-  @RequestMapping("/singer/{singerId}/song/{songId}/video/{videoId}")
+  @GetMapping("/singer/{singerId}/song/{songId}/video/{videoId}")
   public Mono<ResponseEntity<BaseResponse>> likeToVideo(@RequestAttribute("session") Session session,
                                                         @PathVariable("singerId") String singerId,
                                                         @PathVariable("songId") String songId,
                                                         @PathVariable("videoId") String videoId) {
 
     return likeService.findByTypeAndUidAndTargetId("video", session.getUID(), videoId).map(el -> {
-      System.out.println(el);
       throw new UnAuthorizedAccessException(ErrorCode.DUPLICATED_LIKE);
     })
       .switchIfEmpty(videoService.likeVideoById(singerId, songId, videoId).map(el -> {
